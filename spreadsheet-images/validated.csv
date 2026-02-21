@@ -1,0 +1,126 @@
+Name,Notes,City,State,Contact,Schedule,Status,Address,Phone,Source,lat,lon,matched_address,confidence
+Academy Eden Prairie,1-Jan-24,Eden Prairie,MN,Hayden Buckner,"5:00-7:00 PM (No Gi, day unknown)",,"7116 Shady Oak Rd, Eden Prairie, MN 55344",952-377-8111,Sheet1,44.875539,-93.405022,"7116, Shady Oak Road, Eden Prairie, Hennepin County, Minnesota, 55344, United States",OK
+Academy Plymouth,15-Feb-24,Plymouth,MN,,,,"13605 27th Ave N, Plymouth, MN 55441",763-244-6122,Sheet1,45.008664,-93.452999,"13605, 27th Avenue North, Plymouth, Hennepin County, Minnesota, 55441, United States",OK
+Academy St. Paul Brazilian Jiujitsu Academy,,St Paul,MN,Brandon Bergeron,,No Schedule,"322 Chester St, St Paul, MN 55107",651-600-6889,Sheet1,44.936470,-93.071787,"322, Chester Street, West Side, Saint Paul, Ramsey County, Minnesota, 55107, United States","CITY MISMATCH (expected St Paul, got Saint Paul)"
+Academy Brooklyn Center,,Brooklyn Center,MN,Greg Nelson,,Not Listed,"6840 Shingle Creek Pkwy Ste #24, Brooklyn Center, MN 55430",763-560-5896,Sheet1,,,,NOT FOUND
+Academy Burnsville,,Burnsville,MN,Justin Kratzke,,,"11921 Portland ave, Burnsville, MN 55337",763-250-4640,Sheet1,44.788338,-93.265310,"Cardinal Floors and Design, Inc, 11921, Portland Avenue, Burnsville, Dakota County, Minnesota, 55337, United States",OK
+Academy Elk River,,Elk River,MN,Adam Ahern,,Not Listed,"17375 US-10, Elk River, MN 55330",763-691-8996,Sheet1,45.282759,-93.549430,"US 10;US 169, Elk River, Sherburne County, Minnesota, 55330, United States",OK
+Alliance Jiujitsu,,Edina,MN,Damian Hertz,,Not Listed,"7887 Bush Lake Rd #2, Edina, MN 55439",952-942-1190,Sheet1,,,,NOT FOUND
+Alliance BJJ St. Croix,10-Feb-24,St. Croix,WI,Brian Olson,Sat 10:45 AM-12:00 PM,,"2801 Harvey St, Hudson, WI 54016",715-629-0114,Sheet1,44.947749,-92.712108,"C1 Athletics - Crossfit St. Croix, 2801, Harvey Street, St. Croix Business Park, Hudson, Saint Croix County, Wisconsin, 54016, United States","CITY MISMATCH (expected St. Croix, got Hudson)"
+Aikido Ryodokai of Minnesota,Aikido,Bloomington,MN,Topher,Sun 10:00 AM-1:00 PM,,"9061 Lyndale Ave S, Bloomington, MN 55420",612-812-6257,Sheet1,44.839568,-93.288476,"9061, Lyndale Avenue South, Bloomington, Hennepin County, Minnesota, 55420, United States",OK
+Akagi Jiujitsu,Sundays,Prior Lake,MN,,Fri (?),,"14869 State Hwy 13, Prior Lake, MN 55372",952-440-5222,Sheet1,,,,NOT FOUND
+American Top Team,,Duluth,MN,Cris Johnson,"Thu 8:30 AM, Sat 11:00 AM",,"228 1/2 N. Central Ave, Duluth, MN 55807",218-269-2558,Sheet1,46.749928,-92.166483,"North Central Avenue, Cody, West Duluth, Duluth, Saint Louis County, Minnesota, 55807, United States",OK
+Apex Jiujitsu,,Medina,MN,,,,"825 Meander, Medina, MN 55340",612-953-3206,Sheet1,45.052826,-93.544127,"825, Meander Road, Fields of Medina, Medina, Hennepin County, Minnesota, 55340, United States",OK
+Atheneum Martial Arts,,Medina,MN,,,,,,Sheet1,,,,NO ADDRESS
+Black Arrow,,Brainerd,MN,,,,"655 Fairview Ave N, Suite 260, St. Paul, MN 55104",651-274-3077,Sheet1,,,,NOT FOUND
+Bellum Brazilian Jiujitsu,2.12.2025,St Paul,MN,Derek Barlow,Sat 8:00-10:00 AM,,"1362 La Salle Ave, Minneapolis, MN 55403",612-345-4147,Sheet1,,,,NOT FOUND
+Checkmat S Mpls Brazilian Jiujitsu (Danger Room),,Minneapolis,MN,Lemmy,,,,,Sheet1,,,,NO ADDRESS
+Club 37 Jiujitsu,17-May-25,Eau Claire,WI,Nick,,,"4224 Shoreline Dr, Minneapolis, MN 55422",612-208-2433,Sheet1,,,,NOT FOUND
+Crazy Monkey Twin Cities,House,,,,,,,,Sheet1,,,,NO ADDRESS
+Defiant Jiu-Jitsu,,Woodbury,MN,David Soto,Sat 12:00-2:00 PM,,"403 St 8th Ave, Minneapolis, MN 55414",612-521-5836,Sheet1,,,,NOT FOUND
+DNA Jiujitsu,6-Jan-24,Minneapolis,MN,Dr. Greg J. Olson (DOC),Sat 1:00-3:00 PM,,"3315 N Penn Ave, Minneapolis, MN 55411",612-591-1832,Sheet1,45.015401,-93.308360,"3315, North Penn Avenue, Folwell, Camden, Minneapolis, Hennepin County, Minnesota, 55412, United States",OK
+DOCS Gym,,Minneapolis,MN,Michael Padros,Sat 12:30-2:30 PM,,"900 Ocean St, St Paul, MN 55106",218-269-0958,Sheet1,44.967036,-93.046854,"900, Ocean Street, Dayton's Bluff, Saint Paul, Ramsey County, Minnesota, 55106, United States","CITY MISMATCH (expected Minneapolis, got Saint Paul)"
+Doomsday BJJ/Sambo,,Duluth,MN,Dustin Lee Hjelle,"Sat (No Gi, time unknown)",Unknown,"230 E Superior St, Duluth, MN 55802",507-459-7794,Sheet1,46.789527,-92.094385,"230, East Superior Street, Central Business District, Central Duluth, Duluth, Saint Louis County, Minnesota, 55802, United States",OK
+Drengr Jiujitsu,,Winona,MN,Noah Hauser,Sun 3:00-5:00 PM,,"168 E 3rd St, Winona, MN 55987",,Sheet1,44.051505,-91.633072,"168, East 3rd Street, Winona, Winona County, Minnesota, 55987, United States",OK
+Flow Jiujitsu,,La Crosse,WI,,,,"707 Commerce Dr, Woodbury, MN 55125",651-501-1023,Sheet1,44.941263,-92.914578,"Commerce Drive, Commerce Hill, Crossroads Commerce Center, Woodbury, Washington County, Minnesota, 55125, United States","CITY MISMATCH (expected La Crosse, got Woodbury)"
+"Grace Jiujitsu Woodbury ""Excel Martial Arts"" ATA",,Woodbury,MN,,Sun 10:00 AM (Marathon BJJ),,"2015 Ford Pkwy, St. Paul, MN 55116",612-356-2408,Sheet1,44.918247,-93.185510,"Grappler Station, 2015, Ford Parkway, Highland Village, Highland, Saint Paul, Ramsey County, Minnesota, 55116, United States","CITY MISMATCH (expected Woodbury, got Saint Paul)"
+Grappler Station,,St. Paul,MN,"Sensei Max, Sensei Carl",Sun 10:00 AM (Marathon BJJ),,"2015 Ford Pkwy, St. Paul, MN 55116",612-356-2408,Sheet1,44.918247,-93.185510,"Grappler Station, 2015, Ford Parkway, Highland Village, Highland, Saint Paul, Ramsey County, Minnesota, 55116, United States","CITY MISMATCH (expected St. Paul, got Saint Paul)"
+Great Lakes Combatives,Jul 25,Willmar,MN,"Trevor Haney, Daniel Zwilling",Sat 9:30-11:00 AM,,"1605 1st St South A01-02, Willmar, MN 56201",320-894-2990,Sheet1,,,,NOT FOUND
+Green Dragon Kung Fu,Kung Fu,,,,,,,,Sheet1,,,,NO ADDRESS
+Gorilla Combat LLC,1/13/2024,Eden Prairie,MN,"Derek Barlow, Fabio Moresca",Mon+Thu 6:45 PM (?),,"7887 Fuller Rd Suite 101, Eden Prairie, MN 55344",952-474-3213,Sheet1,,,,NOT FOUND
+Griffin Martial Arts,"Karate, Taekwondo",,,,,,,,Sheet1,,,,NO ADDRESS
+Hamel Jiujitsu,23-Jan-24,Hamel,MN,Darrin Homme,Sun 9:00-10:30 AM,,"770 Tower Drive, Hamel, MN 55340",612-490-8265,Sheet1,,,,NOT FOUND
+Haus Jiu-Jitsu,,Mendota Heights,MN,Jose Varela Barca,,,"2535 Pilot Knob RD Suite 126, Mendota Heights, MN 55120",,Sheet1,,,,NOT FOUND
+High Ground Brazilian Jiujitsu,,White Bear Lake,MN,Chris Golv,Sat 11:00 AM (?),,"5960 US 61 #2, White Bear Lake, MN 55110",651-724-9088,Sheet1,,,,NOT FOUND
+Imperial Training Center,,,,,,,,,Sheet1,,,,NO ADDRESS
+Integrative Defense Strategies,,Independence,MN,Todd Fossey,,,"6315 W Main St., Independence, MN 55359",952-496-8948,Sheet1,45.007662,-93.684319,"6315, West Main Street, Armstrong, Independence, Hennepin County, Minnesota, 55359, United States",OK
+Iron Academy Martial Arts,,,,,,,,,Sheet1,,,,NO ADDRESS
+Isanti Grappling Club,,Isanti,,Chris Harsmann,,,"101 Isanti Parkway Northeast, Isanti, MN 55040",,Sheet1,,,,NOT FOUND
+Jiujitsu Five-O,online,,,,,,,,Sheet1,,,,NO ADDRESS
+Kishketon Jiujitsu Academy,CLOSED,New Brighton,MN,Dr. Brendan Kishketon,Wed 8:00-9:30 PM (?),,"445 Old Highway 8 NW Suite 103, New Brighton, MN 55112",651-374-9300,Sheet1,,,,NOT FOUND
+Krav Maga Minneapolis LLC,,Minneapolis,MN,Eugene Garrett,Wed 7:30 PM (?),,"2905 Garfield Ave, Minneapolis, MN 55408",612-558-2284,Sheet1,44.950125,-93.286696,"2905, Garfield Avenue, Whittier, Minneapolis, Hennepin County, Minnesota, 55408, United States",OK
+La Bodega Fitness and Fight Club,,Prior Lake,MN,Mitch White,"Fri 5:30-6:30 PM, Sat 10:00 AM-12:00 PM",,"16861 Welcom Ave SE, Prior Lake, MN 55372",952-334-9536,Sheet1,,,,NOT FOUND
+Legacy American Martial Arts,,West St. Paul,MN,Jack Small,,,"1911 S Roberts St, West St. Paul, MN 55118",651-343-3320,Sheet1,,,,NOT FOUND
+Los Campeones,,Brooklyn Center,MN,Brandon Wilson,,,"6440 James Cir N, Brooklyn Center, MN 55430",763-205-0666,Sheet1,45.072145,-93.304467,"6440, James Circle North, Brooklyn Center, Hennepin County, Minnesota, 55430, United States",OK
+Mashkawizii Academy,,,,,,,,,Sheet1,,,,NO ADDRESS
+McCune's Martial Arts,,Brooklyn Park,MN,Dave Bergem,"? 6:30 PM, Sat 1:00 PM, Sun 9:30 AM",,"8616 Xylon Ave N, Brooklyn Park, MN 55445",763-416-0333,Sheet1,45.111911,-93.386845,"8616, Xylon Avenue North, Brooklyn Park, Hennepin County, Minnesota, 55445, United States",OK
+Midway Judo Club,,West St. Paul,MN,Cary Yamanaka,,No Open Mat,"1068 S Roberts St, West St. Paul, MN 55118",651-453-0403,Sheet1,,,,NOT FOUND
+Migration Jiujitsu,,,,,,,,,Sheet1,,,,NO ADDRESS
+Minnesota Kali Group (MKG Martial Arts),,Minneapolis,MN,,,,"4532 Chicago Ave, Minneapolis, MN 55407",612-821-6800,Sheet1,44.920500,-93.262882,"Minnesota Kali Group, 4532, Chicago Avenue South, Northrop, Regina, Minneapolis, Hennepin County, Minnesota, 55417, United States",OK
+Minnesota Kali Group (MKG Martial Arts) Edina,,Edina,MN,,,,"7119 Amundson Ave, Edina, MN 55439",,Sheet1,44.874348,-93.361913,"7119, Amundson Avenue, Cahill, Edina, Hennepin County, Minnesota, 55439, United States",OK
+Minnesota Kali Group (MKG Martial Arts) North,,Mounds View,MN,Peter Kwong,Sat 9:00 AM (?),,"2552 County Hwy 10, Mounds View, MN 55112",612-564-9697,Sheet1,,,,NOT FOUND
+MSMA Mn School of Martial Arts,"April 21, 24",Chisago City,MN,Blummer Brothers,Sun 4:30-6:00 PM (Open),,"11217 Lake Blvd, Chisago City, MN 55013",651-257-0727,Sheet1,45.373534,-92.890014,"Lake Boulevard, Croix Estates, Chisago City, Chisago County, Minnesota, 55013, United States",OK
+Motion City Jiujitsu,Nov/10/24,New Brighton,MN,"Michelle Donovan, Aiden, Brian",,,,,Sheet1,,,,NO ADDRESS
+MTT Minnesota Top Team,,Eagan,MN,Jeremy Clark,Sat 11:00 AM-12:00 PM,,"3500 Dodd Rd, Eagan, MN 55123",651-340-4349,Sheet1,44.827919,-93.112418,"3500, Dodd Road, Eagan, Dakota County, Minnesota, 55123, United States",OK
+Mtheory Martial Arts,daily,St Louis Park,MN,Ishmael Bentley,"Fri 6:00-7:00 PM, Sat 11:00 AM-12:00 PM",,"5700 W 36th St, St Louis Park, MN 55416",507-403-8596,Sheet1,44.937949,-93.351911,"M-Theory Martial Arts, 5700, 36th Street West, Elmwood, Saint Louis Park, Hennepin County, Minnesota, 55416, United States","CITY MISMATCH (expected St Louis Park, got Saint Louis Park)"
+Next Level Combat,,Woodbury,MN,Nate Klonfield,Sat 10:00-11:00 AM (No Gi),,"1890 Wooddale Dr, Woodbury, MN 55125",651-890-9782,Sheet1,44.921605,-92.970267,"1890, Wooddale Drive, Woodbury, Washington County, Minnesota, 55125, United States",OK
+Pearson Brazilian Jiujitsu,,Northfield,MN,Alex Pearson - Tam Blackstone,Sat 10:00-11:00 AM,,"2010 Jefferson Rd Suite B, Northfield, MN 55057",507-403-8596,Sheet1,,,,NOT FOUND
+Prodigy Martial Arts,,Blaine,MN,"Justin Kahmann, Thao Le, Miki","Mon+Fri 7:15-7:45 AM, Sat 10:45-11:15 AM, Sun",,"1630 101st Ave NE #190, Blaine, MN 55449",763-888-8699,Sheet1,,,,NOT FOUND
+Pro Fitness Training,,,,,,,,,Sheet1,,,,NO ADDRESS
+Rebel Jiujitsu,,Eagan,MN,Tim Blackstone,Sat 10:00 AM,,"2020 Silver Bell Rd #4, Eagan, MN 55122",952-994-5719,Sheet1,,,,NOT FOUND
+Rebel Jiujitsu North,,Rogers,MN,Nate Schutz,Sat 10:00 AM,,"12510 Fletcher Ln, Rogers, MN 55374",763-464-4503,Sheet1,45.181085,-93.542165,"12510, Fletcher Lane, Lemar Estates, Rogers, Hennepin County, Minnesota, 55374, United States",OK
+Rebel Mankato,,,,,,,,,Sheet1,,,,NO ADDRESS
+Resilience Martial Arts Grace JJ Lakeville,,Lakeville,MN,,,Unknown,17630 Juniper Path Suite G,,Sheet1,,,,NOT FOUND
+Rio Jitsu,,Apple Valley,MN,Joao Marinbo,,Unknown,"6950 146th St W #118, Apple Valley, MN 55124",952-388-1799,Sheet1,,,,NOT FOUND
+Romulus Jiujitsu,May 13 2025,Golden Valley,MN,Coach Keir,,,"8808 7th Ave N, Golden Valley, MN 55427",218-461-0311,Sheet1,44.985794,-93.391682,"8808, 7th Avenue North, Golden Valley, Hennepin County, Minnesota, 55427, United States",OK
+Royce Gracie Jiujitsu Academy,,Shakopee,MN,John King,Sat 10:00 AM (?),,"215 1st Ave E, Shakopee, MN 55379",952-222-9882,Sheet1,44.798931,-93.525114,"Underground Jiu-Jitsu, 215, 1st Avenue East, Shakopee, Scott County, Minnesota, 55379, United States",OK
+ShinZenKai Danzan Ryu Jiujitsu,,St. Paul,MN,"Nate Hill, Dan Browning",Mon+Wed 6:00 PM (?),,"755 Prior Ave, St. Paul, MN 55104",,Sheet1,44.965103,-93.183117,"Prior Works Building, 755, North Prior Avenue, Hamline - Midway, Saint Paul, Ramsey County, Minnesota, 55104, United States","CITY MISMATCH (expected St. Paul, got Saint Paul)"
+Shoshin Ryu,,Plymouth,MN,Brian Combo / Mr. Robbie,Sat 12:00-1:00 PM (Ground Training),,"13605 27th Ave N, Plymouth, MN 55441",763-248-6122,Sheet1,45.008664,-93.452999,"13605, 27th Avenue North, Plymouth, Hennepin County, Minnesota, 55441, United States",OK
+Shoujiki Jiujitsu,,Champlin,MN,,Sat 9:30 AM (?),,"11468 Marketplace Dr N, Champlin, MN 55316",763-228-4558,Sheet1,,,,NOT FOUND
+Southside Brazilian Jiujitsu Academy,,Minneapolis,MN,Enrique Muniz,"Fri 5:00 PM, Sun 12:00 PM (?)",,"2303 Kennedy St NE, Minneapolis, MN 55413",612-804-6456,Sheet1,44.995157,-93.228444,"2303, Northeast Kennedy Street, Minneapolis, Hennepin County, Minnesota, 55413, United States",OK
+Spartan Martial Arts Gym,,Oakdale,MN,Tom Schnitz,Sat 12:00-1:00 PM (?),,"432 Hayward Ave N, Oakdale, MN 55128",651-210-1631,Sheet1,44.957414,-92.955588,"432, Hayward Avenue North, Oakdale, Washington County, Minnesota, 55128, United States",OK
+Start BJJ,,St Cloud,MN,,,,"1608 US 52, Rochester, MN 55901",507-512-3698,Sheet1,44.072660,-92.504189,"US 52;US 63, Rochester, Olmsted County, Minnesota, 55901, United States","CITY MISMATCH (expected St Cloud, got Rochester)"
+Stock Martial Arts,,Rochester,MN,Ryan Stock,,,,952-900-2523,Sheet1,,,,NO ADDRESS
+Stoic Martial Arts,,Chanhassen,MN,Mason McClellan,Sat 10:00 AM (Gi Rolls),,"1855 Park Rd, Chanhassen, MN 55317",,Sheet1,44.858785,-93.554895,"Park Road, Chanhassen Lakes Business Park, Chanhassen, Carver County, Minnesota, 55317, United States",OK
+Striking Institute,,Little Canada,MN,Kathy Bridges,,,"3225 Country Dr #120, Little Canada, MN",763-200-1024,Sheet1,,,,NOT FOUND
+Tensei Jiujitsu,4-Mar-24,Minneapolis,MN,Fabio Moresca,Sat 8:00 AM (at Bellum),,"6001 Lyndale Ave S, Studio 3, Minneapolis, MN 55419",612-355-9763,Sheet1,,,,NOT FOUND
+The Cellar Gym,27-Jan-24,Roseville,MN,"Ben Locken, Dave Margraf",Sat 11:30 AM-12:30 PM,,"2480 Fairview Ave N, Suite #1, Roseville, MN 55113",612-355-2259,Sheet1,,,,NOT FOUND
+Tracks Brazilian Jiujitsu,,Andover,MN,Philip Guillen (X2),Sun 9:00 AM (?),,"15190 Bluebird St NW Suite 112, Andover, MN 55304",612-799-9942,Sheet1,,,,NOT FOUND
+Tuffs Karate and Brazilian Jiujitsu,,Coon Rapids,MN,Nate Howe,,Closed,,,Sheet1,,,,NO ADDRESS
+Twin Cities BJJ,,,,,,,,,Sheet1,,,,NO ADDRESS
+United Jiujitsu,,Maplewood,MN,Stan Riser,,No Open Mat,"2055 White Bear Ave Suite 100, Maplewood, MN 55109",651-300-7743,Sheet1,,,,NOT FOUND
+Underground Brazilian Jiujitsu,,Red Wing,MN,Oscar Amaral Prata 4th degree,Sun 10:00 AM-12:00 PM,,"415 Main St, Red Wing, MN 55066",651-327-7660,Sheet1,44.565662,-92.535333,"415, Main Street, Downtown Red Wing, Red Wing, Goodhue County, Minnesota, 55066, United States",OK
+Underground Brazilian Jiujitsu,,Shakopee,MN,John King,,Unknown,"215 1st Ave E, Shakopee, MN 55379",952-388-8737,Sheet1,44.798931,-93.525114,"Underground Jiu-Jitsu, 215, 1st Avenue East, Shakopee, Scott County, Minnesota, 55379, United States",OK
+Warrior's Cove Martial Arts and Fitness,,St. Louis Park,MN,? Owner David Arnebeck,,Not Open,"7107 Cedar Lk Rd S, St Louis Park, MN 55426",612-328-9488,Sheet1,,,,NOT FOUND
+Warrior's Cove Martial Arts and Fitness,,Little Canada,MN,? Owner David Arnebeck,,Not Open,"2900 Rice St, Little Canada, MN 55113",612-208-7984,Sheet1,45.028579,-93.104883,"Taste of Scandinavia, 2900, Rice Street, Roseville, Ramsey County, Minnesota, 55113, United States","CITY MISMATCH (expected Little Canada, got Roseville)"
+World Jiujitsu Academy,30-Jan-24,Eden Prairie,MN,Jeremy Anderson,Tue 6:30 PM (Marathon Roll),,"6900 Shady Oak Rd #100, Eden Prairie, MN 55344",612-270-8620,Sheet1,,,,NOT FOUND
+World of Self Defense - Combat Jiujitsu,,Minneapolis,MN,"Steve Peterson, Roger Fass",Sat 2:00-3:00 PM (?),,"5406 43rd Ave S, Minneapolis, MN 55417",612-726-9369,Sheet1,44.905167,-93.211536,"5406, 43rd Avenue South, Morris Park, Minneapolis, Hennepin County, Minnesota, 55417, United States",OK
+Wrestle Jitsu,,St Cloud,MN,Jake Clark,,,,,Sheet1,,,,NO ADDRESS
+X2 Fitness,,Minneapolis,MN,Gina Franssen,,No Open Mat,"2524 Nicollet Ave #200, Minneapolis, MN 55404",,Sheet1,,,,NOT FOUND
+Academy Brooklyn Center HQ,2023,Brooklyn Center,MN,Greg Nelson,,Not Listed,"6840 Shingle Creek Pkwy Ste #24, Brooklyn Center, MN 55430",763-560-5096,Visited,,,,NOT FOUND
+Academy Burnsville,,Burnsville,MN,,,,"11921 Portland ave, Burnsville, MN 55337",952-977-8781,Visited,44.788338,-93.265310,"Cardinal Floors and Design, Inc, 11921, Portland Avenue, Burnsville, Dakota County, Minnesota, 55337, United States",OK
+Academy Eden Prairie,Jan 01 24,Eden Prairie,MN,Hayden Buckner,"5:00-7:00 PM (No Gi, day unknown)",,"7116 Shady Oak Rd, Eden Prairie, MN 55344",,Visited,44.875539,-93.405022,"7116, Shady Oak Road, Eden Prairie, Hennepin County, Minnesota, 55344, United States",OK
+Academy Plymouth,Feb 15 24,Plymouth,MN,,,,"13605 27th Ave N, Plymouth, MN 55441",763-244-6122,Visited,45.008664,-93.452999,"13605, 27th Avenue North, Plymouth, Hennepin County, Minnesota, 55441, United States",OK
+Academy St. Paul Brazilian Jiujitsu Academy,,,,Brandon Bergeron,,No Schedule,"322 Chester St, St Paul, MN 55107",651-600-6889,Visited,44.936470,-93.071787,"322, Chester Street, West Side, Saint Paul, Ramsey County, Minnesota, 55107, United States",OK
+Alliance BJJ St. Croix,Feb 10 28,St. Croix,WI,Brian Olson,Sat 10:45 AM-12:00 PM,,,,Visited,,,,NO ADDRESS
+Atheneum Martial Arts,2021,Medina,,,,,,,Visited,,,,NO ADDRESS
+Bellum Brazilian Jiujitsu,,St Paul,MN,Derek Barlow,Sat 8:00-10:00 AM,,"655 Fairview Ave N, Suite 260, St. Paul, MN 55104",,Visited,,,,NOT FOUND
+Cellar Gym The,Jan 27 24,Roseville,MN,"Ben Locken, Dave Margraf",Sat 11:30 AM-12:30 PM,,"2480 Fairview Ave N, Suite #1, Roseville, MN 55113",,Visited,,,,NOT FOUND
+Club 37 Jiujitsu,17-May-25,Eau Claire,WI,,,,,,Visited,,,,NO ADDRESS
+Defiant Jiu-Jitsu,,,,,,,,,Visited,,,,NO ADDRESS
+DNA Jiujitsu,Jan 06 24,Minneapolis,MN,David Soto,Sat 12:00-2:00 PM,,"403 St 8th Ave, Minneapolis, MN 55414",,Visited,,,,NOT FOUND
+Grappler Station,Feb 09 25,St. Paul,MN,"Sensei Max, Sensei Carl",Sun 10:00 AM (Marathon BJJ),,"2015 Ford Pkwy, St. Paul, MN 55116",612-356-2408,Visited,44.918247,-93.185510,"Grappler Station, 2015, Ford Parkway, Highland Village, Highland, Saint Paul, Ramsey County, Minnesota, 55116, United States","CITY MISMATCH (expected St. Paul, got Saint Paul)"
+Great Lakes Combatives,Jul 25,Willmar,MN,"Trevor Haney, Daniel Zwilling",Sat 9:30-11:00 AM,,"1605 1st St South A01-02, Willmar, MN 56201",320-894-2990,Visited,,,,NOT FOUND
+Hamel Jiujitsu,,,MN,Darrin Homme,Sun 9:00-10:30 AM,,"770 Tower Drive, Hamel, MN 55340",,Visited,,,,NOT FOUND
+Haus Jiu Jitsu,,Mendota Heights,MN,Jose Varella Barca,,,"2535 Pilot Knob RD, Suite 126, Mendota Heights, MN 55120",,Visited,,,,NOT FOUND
+Integrative Defense Strategies,2023,Independence,,Todd Fossey,,,"6315 W Main St, Independence, MN 55359",,Visited,45.007662,-93.684319,"6315, West Main Street, Armstrong, Independence, Hennepin County, Minnesota, 55359, United States",OK
+Isanti Grappling Club,,,,,,,101 Isanti Parkway Northeast Isanti MN 55040,,Visited,,,,NOT FOUND
+La Bodega Fitness and Fight Club,2025,Prior Lake,MN,Mitch White,"Fri 5:30-6:30 PM, Sat 10:00 AM-12:00 PM",,"16861 Welcom Ave SE, Prior Lake, MN 55372",952-334-9336,Visited,,,,NOT FOUND
+Los Campeones,2025,,,Brandon Wilson,,,"6440 James Cir N, Brooklyn Center, MN 55430",,Visited,45.072145,-93.304467,"6440, James Circle North, Brooklyn Center, Hennepin County, Minnesota, 55430, United States",OK
+McCune's Martial Arts,,,,,"? 6:30 PM, Sat 11:00 AM, Sun 5:30 AM (?)",,"8616 Xylon Ave N, Brooklyn Park, MN 55445",763-416-0333,Visited,45.111911,-93.386845,"8616, Xylon Avenue North, Brooklyn Park, Hennepin County, Minnesota, 55445, United States",OK
+Motion City Jiujitsu,Nov/10/24,New Brighton,MN,"Michelle Donovan, Aiden, Brian",,,"550 County Road D West #2, New Brighton, MN 55112",612-460-0116,Visited,45.036233,-93.194196,"Motion City, 550, County Road D West, New Brighton, Ramsey County, Minnesota, 55112, United States",OK
+MSMA Mn School of Martial Arts,"April 21, 24",Chisago City,MN,,Sun 4:30-6:00 PM (Open),,"11217 Lake Blvd, Chisago City, MN 55013",,Visited,45.373534,-92.890014,"Lake Boulevard, Croix Estates, Chisago City, Chisago County, Minnesota, 55013, United States",OK
+Mtheory Martial Arts,DAILY,St Louis Park,MN,Ishmael Bentley,,,,,Visited,,,,NO ADDRESS
+MTT Minnesota Top Team,2023,Eagan,,Jeremy Clark,Sat 11:00 AM-12:00 PM,,"3500 Dodd Rd, Eagan, MN 55123",,Visited,44.827919,-93.112418,"3500, Dodd Road, Eagan, Dakota County, Minnesota, 55123, United States",OK
+Next Level Combat,,,,,,,,,Visited,,,,NO ADDRESS
+Prodigy Martial Arts,March 16 24,Blaine,,"Justin Kahmann, Thao Le","Mon+Fri 7:15-7:45 AM, Sat 10:45-11:15 AM",,"1630 101st Ave NE #190, Blaine, MN 55449",,Visited,,,,NOT FOUND
+Rebel Jiujitsu,,,,Tim Blackstone,,,,,Visited,,,,NO ADDRESS
+Rio Jitsu,,Apple Valley,MN,Joao Marinbo,,,"6950 146th St W #118, Apple Valley, MN 55124",,Visited,,,,NOT FOUND
+Romulus Jiujitsu,May 13 2025,Golden Valley,MN,Coach Keir,,,"8808 7th Ave N, Golden Valley, MN 55427",,Visited,44.985794,-93.391682,"8808, 7th Avenue North, Golden Valley, Hennepin County, Minnesota, 55427, United States",OK
+Shoshin Ryu,2022,Plymouth,MN,Brian Combo / Mr. Robbie,Sat 12:00-1:00 PM (Ground Training),,"13605 27th Ave N, Plymouth, MN 55441",763-248-6122,Visited,45.008664,-93.452999,"13605, 27th Avenue North, Plymouth, Hennepin County, Minnesota, 55441, United States",OK
+Striking Institute,,Little Canada,MN,Kathy Bridges,,,"3225 Country Dr #120, Little Canada, MN",,Visited,,,,NOT FOUND
+Stoic Martial Arts,April 27,Chanhassen,MN,Mason McClellan,Sat 10:00 AM (Gi Rolls),,"1855 Park Rd, Chanhassen, MN 55317",952-900-5253,Visited,44.858785,-93.554895,"Park Road, Chanhassen Lakes Business Park, Chanhassen, Carver County, Minnesota, 55317, United States",OK
+Tensei Jiujitsu,Mar 04 24,Minneapolis,MN,Fabio Moresca,,,"6001 Lyndale Ave S, Studio 3, Minneapolis, MN 55419",,Visited,,,,NOT FOUND
+Tracks Brazilian Jiujitsu,,,,,,,,,Visited,,,,NO ADDRESS
+World Jiujitsu Academy,Jan 09 24,,,Jeremy Anderson,Tue 6:30 PM (Marathon Roll),,"6900 Shady Oak Rd #100, Eden Prairie, MN 55344",,Visited,,,,NOT FOUND
+Wrestle Jitsu,2022,St Cloud,MN,Jake Clark,,,,,Visited,,,,NO ADDRESS

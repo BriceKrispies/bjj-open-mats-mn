@@ -1,0 +1,25 @@
+{
+  "gyms": [
+    {
+      "name": "Alliance BJJ St. Croix",
+      "city": "Hudson",
+      "state": "WI",
+      "homepage": "https://www.alliancejiujitsustcroix.com",
+      "notes": "Sat 10:45 AM-12:00 PM open mat per spreadsheet"
+    },
+    {
+      "name": "The Cellar Gym",
+      "city": "Roseville",
+      "state": "MN",
+      "homepage": "https://www.thecellargym.com",
+      "notes": "Sat 11:30 AM-12:30 PM per spreadsheet"
+    },
+    {
+      "name": "Bellum Brazilian Jiujitsu",
+      "city": "St Paul",
+      "state": "MN",
+      "homepage": "https://www.bellumbjj.com",
+      "notes": "Sat 8:00-10:00 AM per spreadsheet"
+    }
+  ]
+}
