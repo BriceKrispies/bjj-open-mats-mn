@@ -108,6 +108,11 @@
     border-color: var(--c-border-light);
     color: var(--c-text-muted);
   }
+  .badge--danger {
+    background: var(--c-danger-bg);
+    border-color: var(--c-danger);
+    color: var(--c-danger);
+  }
   .badge--today {
     background: var(--c-accent);
     border-color: var(--c-accent);

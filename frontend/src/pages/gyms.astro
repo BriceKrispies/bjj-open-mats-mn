@@ -1,0 +1,132 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Gyms" currentPath="/gyms">
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title">Gyms</h1>
+      <span class="page-header__subtitle">Community-maintained registry</span>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn btn--primary btn--sm" id="submit-gym-btn">+ Submit Gym</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section__toolbar gyms-toolbar">
+      <div class="section__toolbar-left gyms-toolbar__left">
+        <input
+          type="text"
+          class="input gyms-search"
+          id="gyms-search"
+          placeholder="Search gyms…"
+          aria-label="Search gyms"
+        />
+      </div>
+      <div class="gyms-toolbar__right">
+        <select class="gyms-status-filter" id="gyms-status-filter" aria-label="Filter by status">
+          <option value="">All Statuses</option>
+          <option value="verified">Verified</option>
+          <option value="needs-review">Needs Review</option>
+          <option value="stale">Stale</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="gyms-content">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+</AppLayout>
+
+<script>
+  import { store } from '../core/store';
+  import { bootstrap } from '../registry';
+  import { getGymList, filterGyms } from '../modules/gyms/gymsViewModel';
+
+  bootstrap();
+
+  function esc(s: string): string {
+    const el = document.createElement('span');
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
+  let searchQuery = '';
+  let statusFilter = '';
+
+  const STATUS_CONFIG: Record<string, { cls: string; label: string }> = {
+    'verified':     { cls: 'badge--success', label: '✓ Verified' },
+    'needs-review': { cls: 'badge--accent',  label: 'Needs Review' },
+    'stale':        { cls: 'badge--danger',  label: 'Stale' },
+  };
+
+  function statusBadge(status: string): string {
+    const cfg = STATUS_CONFIG[status] ?? { cls: '', label: status };
+    return `<span class="badge ${cfg.cls}">${esc(cfg.label)}</span>`;
+  }
+
+  function render() {
+    const container = document.getElementById('gyms-content');
+    if (!container) return;
+
+    const all = getGymList(store.getState());
+    const gyms = filterGyms(all, searchQuery, statusFilter);
+
+    if (gyms.length === 0) {
+      container.innerHTML = `<div class="empty-state">${
+        all.length === 0
+          ? 'No gyms found. Submit one to get started.'
+          : 'No gyms match your search.'
+      }</div>`;
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="data-table gyms-table">
+        <thead>
+          <tr>
+            <th>Gym Name</th>
+            <th class="gyms-col-location">Location</th>
+            <th>Status</th>
+            <th class="gyms-col-verified">Last Verified</th>
+            <th class="gyms-col-action"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${gyms.map(gym => `
+            <tr>
+              <td>
+                <span class="gym-name">${esc(gym.gymName)}</span>
+                ${gym.location ? `<span class="gym-location-inline">${esc(gym.location)}</span>` : ''}
+              </td>
+              <td class="gyms-col-location">${esc(gym.location)}</td>
+              <td>${statusBadge(gym.status)}</td>
+              <td class="gyms-col-verified gyms-col-muted">${esc(gym.lastSeenLabel)}</td>
+              <td class="gyms-col-action">
+                <button class="btn btn--sm btn--ghost">Suggest Edit</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  const searchInput = document.getElementById('gyms-search') as HTMLInputElement;
+  const statusSelect = document.getElementById('gyms-status-filter') as HTMLSelectElement;
+
+  searchInput?.addEventListener('input', () => {
+    searchQuery = searchInput.value;
+    render();
+  });
+
+  statusSelect?.addEventListener('change', () => {
+    statusFilter = statusSelect.value;
+    render();
+  });
+
+  render();
+  store.subscribe(() => render());
+</script>

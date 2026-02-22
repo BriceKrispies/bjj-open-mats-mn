@@ -3,11 +3,13 @@
 
 import { homeModule } from './modules/home/index';
 import { calendarModule } from './modules/calendar/index';
+import { gymsModule } from './modules/gyms/index';
 import { settingsModule } from './modules/settings/index';
 
 export const modules = [
   homeModule,
   calendarModule,
+  gymsModule,
   settingsModule,
 ].sort((a, b) => a.order - b.order);
 

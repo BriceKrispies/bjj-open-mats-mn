@@ -59,6 +59,76 @@
     padding-top: 2px;
   }
 
+  /* ─ Gyms page ─ */
+  .gyms-toolbar {
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .gyms-toolbar__left {
+    flex: 1;
+    min-width: 0;
+  }
+  .gyms-toolbar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-shrink: 0;
+  }
+  .gyms-search {
+    height: 28px;
+    font-size: var(--fs-sm);
+    max-width: 220px;
+  }
+  .gyms-status-filter {
+    height: 28px;
+    padding: 0 var(--sp-2);
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--c-surface);
+    color: var(--c-text);
+    cursor: pointer;
+  }
+  .gym-name {
+    display: block;
+    font-weight: var(--fw-semibold);
+    color: var(--c-text);
+    font-size: var(--fs-md);
+  }
+  .gym-location-inline {
+    display: none;
+    font-size: var(--fs-xs);
+    color: var(--c-text-muted);
+    margin-top: 2px;
+  }
+  .gyms-col-muted {
+    color: var(--c-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .gyms-search {
+      max-width: 100%;
+      width: 100%;
+    }
+    .gyms-toolbar__left {
+      width: 100%;
+    }
+    .gyms-toolbar__right {
+      width: 100%;
+    }
+    .gyms-status-filter {
+      width: 100%;
+    }
+    .gym-location-inline {
+      display: block;
+    }
+    .gyms-table .gyms-col-location,
+    .gyms-table .gyms-col-verified {
+      display: none;
+    }
+  }
+
   /* ─ Dev page ─ */
   .dev-toolbar {
     display: flex;
