@@ -23,30 +23,79 @@ import AppLayout from '../layouts/AppLayout.astro';
       </div>
     </div>
   </div>
+
+  <div class="section">
+    <div class="dev-toolbar">
+      <span class="dev-count" style="font-family:var(--font-mono);">Time · Kind · Type · Payload</span>
+      <button class="btn btn--sm" id="clear-log-btn">Clear Log</button>
+    </div>
+    <div id="log-content">
+      <div class="empty-state">No events yet — navigate or interact with the app.</div>
+    </div>
+  </div>
 </AppLayout>
 
 <script>
   import { store } from '../core/store';
   import { bootstrap } from '../registry';
   import { createAction } from '../core/actions';
+  import { getLog, clearLog } from '../core/eventLog';
   import { getSettingsView } from '../modules/settings/settingsViewModel';
+  import { formatLogEntries } from '../modules/dev/devViewModel';
 
   bootstrap();
 
-  function render() {
+  function esc(s: string): string {
+    const el = document.createElement('span');
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
+  function renderStats() {
     const stats = document.getElementById('data-stats');
     if (!stats) return;
     const view = getSettingsView(store.getState());
     stats.textContent = `${view.openMatCount} open mats · ${view.rsvpCount} RSVPs stored`;
   }
 
+  function renderLog() {
+    const content = document.getElementById('log-content');
+    if (!content) return;
+
+    const entries = formatLogEntries(getLog());
+
+    if (entries.length === 0) {
+      content.innerHTML = '<div class="empty-state">No events yet — navigate or interact with the app.</div>';
+      return;
+    }
+
+    content.innerHTML = entries.map(e => `
+      <div class="log-entry">
+        <span class="log-entry__time">${esc(e.timeFormatted)}</span>
+        <span class="log-entry__kind log-entry__kind--${esc(e.kind)}">${esc(e.kind)}</span>
+        <span class="log-entry__type">${esc(e.type)}</span>
+        <span class="log-entry__payload">${esc(e.preview)}</span>
+      </div>
+    `).join('');
+  }
+
   document.getElementById('reset-btn')?.addEventListener('click', () => {
     if (confirm('Reset all app data? This clears RSVPs and reloads sample mats.')) {
       store.dispatch(createAction('data/reset', undefined));
-      render();
+      renderStats();
     }
   });
 
-  render();
-  store.subscribe(() => render());
+  document.getElementById('clear-log-btn')?.addEventListener('click', () => {
+    clearLog();
+    renderLog();
+  });
+
+  renderStats();
+  renderLog();
+
+  store.subscribe(() => {
+    renderStats();
+    renderLog();
+  });
 </script>
