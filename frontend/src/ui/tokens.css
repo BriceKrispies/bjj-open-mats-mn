@@ -1,42 +1,138 @@
+/* ============================================================
+   DESIGN TOKENS  — BJJ Open Mats
+   All values defined here as CSS custom properties.
+   Dark mode is the default; light mode is opt-in via [data-theme="light"].
+   ============================================================ */
+
+:root,
+[data-theme='dark'] {
+  /* ── Accent (gym green) ──────────────────────────────────── */
+  --color-accent:       #4caf50;
+  --color-accent-dim:   #2e7d32;
+  --color-accent-glow:  rgba(76, 175, 80, 0.18);
+  --color-on-accent:    #ffffff;
+
+  /* ── Neutrals ───────────────────────────────────────────── */
+  --color-bg:           #0f0f0f;
+  --color-bg-elevated:  #1a1a1a;
+  --color-surface:      #1e1e1e;
+  --color-surface-2:    #252525;
+  --color-surface-3:    #2e2e2e;
+  --color-border:       rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  /* ── Text ───────────────────────────────────────────────── */
+  --color-text-primary:   #f0f0f0;
+  --color-text-secondary: #9e9e9e;
+  --color-text-muted:     #616161;
+  --color-text-on-accent: #ffffff;
+
+  /* ── Semantic ───────────────────────────────────────────── */
+  --color-success: #4caf50;
+  --color-warning: #ffb300;
+  --color-error:   #ef5350;
+  --color-info:    #42a5f5;
+
+  --color-success-bg: rgba(76, 175, 80, 0.12);
+  --color-warning-bg: rgba(255, 179, 0, 0.12);
+  --color-error-bg:   rgba(239, 83, 80, 0.12);
+  --color-info-bg:    rgba(66, 165, 245, 0.12);
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-theme='light'] {
+  --color-accent:       #2e7d32;
+  --color-accent-dim:   #1b5e20;
+  --color-accent-glow:  rgba(46, 125, 50, 0.12);
+  --color-on-accent:    #ffffff;
+
+  --color-bg:           #f5f5f5;
+  --color-bg-elevated:  #eeeeee;
+  --color-surface:      #ffffff;
+  --color-surface-2:    #f9f9f9;
+  --color-surface-3:    #f0f0f0;
+  --color-border:       rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.14);
+
+  --color-text-primary:   #1a1a1a;
+  --color-text-secondary: #616161;
+  --color-text-muted:     #9e9e9e;
+  --color-text-on-accent: #ffffff;
+
+  --color-success: #2e7d32;
+  --color-warning: #f57c00;
+  --color-error:   #c62828;
+  --color-info:    #1565c0;
+
+  --color-success-bg: rgba(46, 125, 50, 0.08);
+  --color-warning-bg: rgba(245, 124, 0, 0.08);
+  --color-error-bg:   rgba(198, 40, 40, 0.08);
+  --color-info-bg:    rgba(21, 101, 192, 0.08);
+
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
 :root {
-  --c-primary: #1a56db;
-  --c-primary-hover: #1648b8;
-  --c-primary-light: #e8effc;
-  --c-bg: #f3f4f6;
-  --c-surface: #ffffff;
-  --c-text: #111827;
-  --c-text-secondary: #6b7280;
-  --c-text-muted: #9ca3af;
-  --c-border: #e5e7eb;
-  --c-warn: #f59e0b;
-  --c-warn-bg: #fef3c7;
-  --c-success: #10b981;
-  --c-success-bg: #d1fae5;
-  --c-muted-bg: #f3f4f6;
+  /* ── Spacing (4-pt grid) ─────────────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
 
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 12px;
-  --space-lg: 16px;
-  --space-xl: 24px;
-  --space-2xl: 32px;
-
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* ── Border radii ────────────────────────────────────────── */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-xs: 0.75rem;
-  --font-sm: 0.8125rem;
-  --font-base: 0.9375rem;
-  --font-lg: 1.125rem;
-  --font-xl: 1.375rem;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   17px;
+  --text-lg:   20px;
+  --text-xl:   24px;
+  --text-2xl:  30px;
+
+  --weight-normal:   400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --leading-tight:  1.2;
+  --leading-snug:   1.35;
+  --leading-normal: 1.5;
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --ease-fast:   150ms ease;
+  --ease-normal: 250ms ease;
+  --ease-slow:   400ms ease;
+  --ease-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --top-bar-height:    56px;
+  --bottom-nav-height: 64px;
+  --content-max-width: 600px;
+
+  /* Safe area insets for devices with notches/home indicators */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }

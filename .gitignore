@@ -8,6 +8,10 @@ dist/
 .vite/
 *.tsbuildinfo
 
+# Bun compiled output alongside .ts/.tsx source files
+frontend/src/**/*.js
+frontend/src/**/*.jsx
+
 # Bun
 .bun/
 
