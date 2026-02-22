@@ -26,6 +26,7 @@ export function BottomNav(props: BottomNavProps): JSX.Element {
             <A
               href={item.path}
               class={`bottom-nav__item${isActive() ? ' active' : ''}`}
+              activeClass=""
               aria-label={item.label}
               aria-current={isActive() ? 'page' : undefined}
             >

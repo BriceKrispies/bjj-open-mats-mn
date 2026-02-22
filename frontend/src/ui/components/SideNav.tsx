@@ -31,6 +31,7 @@ export function SideNav(props: SideNavProps): JSX.Element {
             <A
               href={item.path}
               class={`side-nav__item${isActive() ? ' active' : ''}`}
+              activeClass=""
               aria-label={item.label}
               aria-current={isActive() ? 'page' : undefined}
             >
