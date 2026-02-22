@@ -19,7 +19,7 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'scripts/**'],
+    ignores: ['dist/**', 'node_modules/**', 'scripts/**', 'src/**/*.{js,jsx}'],
   },
 
   // ─── Base TypeScript config for all src files ────────────────────────────

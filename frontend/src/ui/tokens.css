@@ -132,7 +132,25 @@
   --bottom-nav-height: 64px;
   --content-max-width: 600px;
 
+  /* Responsive layout */
+  --content-max-width-tablet:  960px;
+  --content-max-width-desktop: 1280px;
+  --page-gutter:    var(--sp-4);  /* updated at larger breakpoints */
+  --side-nav-width: 220px;        /* desktop side rail */
+
   /* Safe area insets for devices with notches/home indicators */
   --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Responsive layout token overrides ─────────────────────── */
+@media (min-width: 900px) {
+  :root { --page-gutter: var(--sp-6); }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --page-gutter:    var(--sp-8);
+    --side-nav-width: 240px;
+  }
 }

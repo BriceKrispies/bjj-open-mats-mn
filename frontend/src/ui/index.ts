@@ -14,4 +14,5 @@ export { ListRow } from './components/ListRow';
 export { Divider } from './components/Divider';
 export { TopBar } from './components/TopBar';
 export { BottomNav } from './components/BottomNav';
+export { SideNav } from './components/SideNav';
 export * from './icons';

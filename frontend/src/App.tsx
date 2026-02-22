@@ -3,6 +3,7 @@ import { Suspense } from 'solid-js';
 import { Router, Route } from '@solidjs/router';
 import { routerService } from './core/router';
 import { BottomNav } from './ui/components/BottomNav';
+import { SideNav } from './ui/components/SideNav';
 import { ToastContainer } from './ui/components/ToastContainer';
 
 /**
@@ -14,6 +15,7 @@ function AppShell(props: { children?: JSX.Element }): JSX.Element {
 
   return (
     <div class="app-shell">
+      <SideNav items={navItems} />
       <main class="app-content">
         <Suspense>{props.children}</Suspense>
       </main>

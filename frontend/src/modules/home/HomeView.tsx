@@ -120,7 +120,7 @@ export function HomeView(): JSX.Element {
                 <span class="section-title">{label}</span>
                 <span class="text-sm text-secondary">{mats.length} mat{mats.length !== 1 ? 's' : ''}</span>
               </div>
-              <div style={{ display: 'flex', 'flex-direction': 'column', gap: 'var(--sp-3)', padding: '0 var(--sp-4) var(--sp-3)' }}>
+              <div class="mats-grid">
                 <For each={mats}>
                   {(mat) => (
                     <OpenMatCard
