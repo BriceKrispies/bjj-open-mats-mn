@@ -40,7 +40,11 @@ export function App(): JSX.Element {
       <Router base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <Route path="/" component={AppShell}>
           {routes.map((route) => (
-            <Route path={route.path} component={route.component} />
+            // The home route is registered as '/' but must be rendered as ''
+            // (empty string) when nested inside a parent <Route path="/">.
+            // @solidjs/router strips the parent's '/' before matching children,
+            // so a child path="/" never matches the remaining "" — only path="" does.
+            <Route path={route.path === '/' ? '' : route.path} component={route.component} />
           ))}
           <Route path="*404" component={NotFound} />
         </Route>
