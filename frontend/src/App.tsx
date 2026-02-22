@@ -37,7 +37,7 @@ export function App(): JSX.Element {
 
   return (
     <>
-      <Router>
+      <Router base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <Route path="/" component={AppShell}>
           {routes.map((route) => (
             <Route path={route.path} component={route.component} />
