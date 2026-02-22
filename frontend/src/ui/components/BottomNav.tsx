@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 import { For, Show } from 'solid-js';
-import { A, useLocation } from '@solidjs/router';
+import { A } from '@solidjs/router';
 import type { NavItem } from '../../core/router';
 import { getIcon } from '../icons';
 import { Badge } from './Badge';
@@ -10,25 +10,19 @@ interface BottomNavProps {
 }
 
 export function BottomNav(props: BottomNavProps): JSX.Element {
-  const location = useLocation();
-
   return (
     <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
       <For each={props.items}>
         {(item) => {
           const IconComp = getIcon(item.icon);
-          const isActive = () =>
-            item.path === '/'
-              ? location.pathname === '/'
-              : location.pathname.startsWith(item.path);
 
           return (
             <A
               href={item.path}
-              class={`bottom-nav__item${isActive() ? ' active' : ''}`}
-              activeClass=""
+              class="bottom-nav__item"
+              activeClass="active"
+              end={item.path === '/'}
               aria-label={item.label}
-              aria-current={isActive() ? 'page' : undefined}
             >
               <span class="bottom-nav__icon">
                 <IconComp size={22} />

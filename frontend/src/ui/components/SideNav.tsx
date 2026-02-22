@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 import { For, Show } from 'solid-js';
-import { A, useLocation } from '@solidjs/router';
+import { A } from '@solidjs/router';
 import type { NavItem } from '../../core/router';
 import { getIcon, MatIcon } from '../icons';
 import { Badge } from './Badge';
@@ -10,8 +10,6 @@ interface SideNavProps {
 }
 
 export function SideNav(props: SideNavProps): JSX.Element {
-  const location = useLocation();
-
   return (
     <nav class="side-nav" role="navigation" aria-label="Main navigation">
       <div class="side-nav__brand">
@@ -22,18 +20,14 @@ export function SideNav(props: SideNavProps): JSX.Element {
       <For each={props.items}>
         {(item) => {
           const IconComp = getIcon(item.icon);
-          const isActive = () =>
-            item.path === '/'
-              ? location.pathname === '/'
-              : location.pathname.startsWith(item.path);
 
           return (
             <A
               href={item.path}
-              class={`side-nav__item${isActive() ? ' active' : ''}`}
-              activeClass=""
+              class="side-nav__item"
+              activeClass="active"
+              end={item.path === '/'}
               aria-label={item.label}
-              aria-current={isActive() ? 'page' : undefined}
             >
               <span class="side-nav__icon">
                 <IconComp size={20} />
