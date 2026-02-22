@@ -7,8 +7,7 @@
 
 import type { Module } from '../../core/module';
 import { openMatsRepo } from '../../core/storage/openMats.repo';
-import { eventBus } from '../../core/events';
-import { seedIfEmpty } from '../../lib/mock-data';
+import { generateMockOpenMats } from '../../lib/mock-data';
 import { HomeView } from './HomeView';
 
 const homeModule: Module = {
@@ -20,9 +19,8 @@ const homeModule: Module = {
     api.router.registerNavItem({ path: '/', label: 'Home', icon: 'home', order: 0 });
 
     // Seed mock data on first run
-    const result = seedIfEmpty(openMatsRepo);
-    if (result.seeded) {
-      eventBus.emit('openmat/seeded', { count: result.count });
+    if (openMatsRepo.list().length === 0) {
+      api.store.actions.seedOpenMats(generateMockOpenMats());
     }
   },
 };

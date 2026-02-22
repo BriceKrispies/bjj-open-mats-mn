@@ -3,7 +3,7 @@ import { createSignal, For, Show, onMount, onCleanup } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
 import { openMatsRepo } from '../../core/storage/openMats.repo';
 import type { OpenMat } from '../../core/storage/openMats.repo';
-import { eventBus } from '../../core/events';
+import { appStore } from '../../core/store';
 import { IconButton } from '../../ui/components/IconButton';
 import { ChevronLeftIcon, ChevronRightIcon } from '../../ui/icons';
 import {
@@ -24,12 +24,12 @@ export function CalendarView(): JSX.Element {
   // Refresh the mat list when data changes
   const refresh = () => setOpenMats(openMatsRepo.list());
   onMount(() => {
-    eventBus.on('openmat/seeded', refresh);
-    eventBus.on('data/reset', refresh);
+    appStore.on('openmat/seeded', refresh);
+    appStore.on('data/reset', refresh);
   });
   onCleanup(() => {
-    eventBus.off('openmat/seeded', refresh);
-    eventBus.off('data/reset', refresh);
+    appStore.off('openmat/seeded', refresh);
+    appStore.off('data/reset', refresh);
   });
 
   const prevMonth = () => {

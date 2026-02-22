@@ -5,9 +5,10 @@ import { openMatsRepo } from '../../core/storage/openMats.repo';
 import type { OpenMat } from '../../core/storage/openMats.repo';
 import { rsvpsRepo } from '../../core/storage/rsvps.repo';
 import type { Rsvp } from '../../core/storage/rsvps.repo';
-import { eventBus } from '../../core/events';
+import { appStore } from '../../core/store';
+import { storeActions } from '../../core/actions';
 import { showToast } from '../../core/toast';
-import { uid, formatTime, plural } from '../../lib/utils';
+import { formatTime, plural } from '../../lib/utils';
 import { fromDateKey, dayHeadingLabel, toDateKey } from '../../lib/calendarUtils';
 import { Button } from '../../ui/components/Button';
 import { Chip } from '../../ui/components/Chip';
@@ -34,16 +35,16 @@ export function DayView(): JSX.Element {
   const refreshAll = () => { refreshMats(); refreshRsvps(); };
 
   onMount(() => {
-    eventBus.on('openmat/seeded', refreshMats);
-    eventBus.on('data/reset', refreshAll);
-    eventBus.on('rsvp/created', refreshRsvps);
-    eventBus.on('rsvp/removed', refreshRsvps);
+    appStore.on('openmat/seeded', refreshMats);
+    appStore.on('data/reset', refreshAll);
+    appStore.on('rsvp/created', refreshRsvps);
+    appStore.on('rsvp/removed', refreshRsvps);
   });
   onCleanup(() => {
-    eventBus.off('openmat/seeded', refreshMats);
-    eventBus.off('data/reset', refreshAll);
-    eventBus.off('rsvp/created', refreshRsvps);
-    eventBus.off('rsvp/removed', refreshRsvps);
+    appStore.off('openmat/seeded', refreshMats);
+    appStore.off('data/reset', refreshAll);
+    appStore.off('rsvp/created', refreshRsvps);
+    appStore.off('rsvp/removed', refreshRsvps);
   });
 
   const rsvpFor = (openMatId: string): Rsvp | undefined =>
@@ -54,29 +55,17 @@ export function DayView(): JSX.Element {
 
     // Tapping the active status again → remove (toggle off)
     if (existing?.status === status) {
-      rsvpsRepo.remove(existing.id);
+      storeActions.removeRsvp({ rsvpId: existing.id, openMatId: openMat.id });
       setRsvps(rsvpsRepo.list());
-      eventBus.emit('rsvp/removed', { rsvpId: existing.id, openMatId: openMat.id });
       showToast('RSVP removed', 'info');
       return;
     }
 
-    // Replace any existing RSVP with a different status
-    if (existing) {
-      rsvpsRepo.remove(existing.id);
-    }
-
-    const rsvp: Rsvp = {
-      id: uid(),
-      openMatId: openMat.id,
-      status,
-      createdAt: new Date().toISOString(),
-    };
-    rsvpsRepo.set(rsvp);
+    // createRsvp handles eviction of any existing RSVP internally
+    storeActions.createRsvp({ openMatId: openMat.id, status });
     setRsvps(rsvpsRepo.list());
 
     if (status === 'going') {
-      eventBus.emit('rsvp/created', { rsvp, openMat });
       showToast(`RSVP'd to ${openMat.gymName}! 🥋`, 'success');
     } else {
       showToast('Marked as not going', 'info');

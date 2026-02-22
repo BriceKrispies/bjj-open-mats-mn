@@ -14,7 +14,7 @@
 4. [Core Services](#4-core-services)
 5. [Data Models](#5-data-models)
 6. [Storage Layer](#6-storage-layer)
-7. [Event Bus](#7-event-bus)
+7. [App Store & Action Map](#7-app-store--action-map)
 8. [Router Service](#8-router-service)
 9. [Module API Contract](#9-module-api-contract)
 10. [Modules](#10-modules)
@@ -48,7 +48,9 @@ frontend/
     ├── core/                   # Infrastructure — no module imports allowed
     │   ├── module.ts           # Module + ModuleAPI types; createModuleAPI()
     │   ├── loader.ts           # loadModules(registry) — calls register()
-    │   ├── events.ts           # Typed EventBus singleton
+    │   ├── events.ts           # Typed EventBus singleton (internal — do not import from modules)
+    │   ├── store.ts            # Central AppStore — dispatch choke-point + session log
+    │   ├── actions.ts          # Typed action helpers — the ONLY sanctioned write path
     │   ├── router.ts           # RouterService singleton
     │   ├── settings.ts         # Theme signal + localStorage persistence
     │   ├── toast.ts            # Toast queue signal + show/dismiss
@@ -63,7 +65,7 @@ frontend/
     ├── lib/                    # Pure utilities — no framework/core imports
     │   ├── utils.ts            # Date formatting, uid(), clsx(), plural()
     │   ├── calendarUtils.ts    # Month grid builder, toDateKey, fromDateKey
-    │   └── mock-data.ts        # generateMockOpenMats(), seedIfEmpty()
+    │   └── mock-data.ts        # generateMockOpenMats()
     │
     ├── ui/                     # Design system — no module imports allowed
     │   ├── tokens.css          # All CSS custom properties (dark + light)
@@ -85,7 +87,8 @@ frontend/
     │       ├── ListRow.tsx
     │       ├── Divider.tsx
     │       ├── TopBar.tsx
-    │       └── BottomNav.tsx   # Reads NavItems from routerService
+    │       ├── SideNav.tsx     # Desktop rail nav (≥900px), reads NavItems
+    │       └── BottomNav.tsx   # Mobile tab bar (<900px), reads NavItems
     │
     └── modules/                # Feature modules — strict isolation
         ├── home/
@@ -97,13 +100,16 @@ frontend/
         │   ├── CalendarView.tsx # Month grid, pip indicators per day
         │   └── DayView.tsx     # Day detail + Going/Not Going RSVP actions
         ├── message-center/
-        │   ├── index.ts        # Subscribes to rsvp/* events, creates messages
+        │   ├── index.ts        # Subscribes to rsvp/* actions, creates messages
         │   ├── InboxView.tsx   # Message list with unread badges
         │   ├── MessageDetail.tsx # Marks message read on mount
         │   └── unreadCount.ts  # Reactive signal for unread count (nav badge)
-        └── settings/
-            ├── index.ts        # Registers /settings
-            └── SettingsView.tsx # Theme toggle, Reset, Clear data
+        ├── settings/
+        │   ├── index.ts        # Registers /settings
+        │   └── SettingsView.tsx # Theme toggle, Reset, Clear data
+        └── devtools/
+            ├── index.ts        # Registers /dev; nav item only when dev mode enabled
+            └── DevtoolsView.tsx # Reactive action log viewer + controls
 ```
 
 > **Note:** `.js` files alongside `.ts` files are Bun's compiled output cache — they are not source files and should be gitignored if they appear in the working tree.
@@ -121,9 +127,9 @@ frontend/
                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │  Modules  (src/modules/*)                               │
-│  ┌──────────┐ ┌──────────┐ ┌────────────────┐ ┌──────┐ │
-│  │  home    │ │ calendar │ │ message-center │ │ sett.│ │
-│  └──────────┘ └──────────┘ └────────────────┘ └──────┘ │
+│  ┌──────┐ ┌──────────┐ ┌────────────────┐ ┌──────┐ ┌──┐│
+│  │ home │ │ calendar │ │ message-center │ │ sett.│ │dev││
+│  └──────┘ └──────────┘ └────────────────┘ └──────┘ └──┘│
 │  Each module is isolated — no cross-module imports      │
 │  Communicate only through core services ↓               │
 └───────────────────┬─────────────────────────────────────┘
@@ -131,8 +137,9 @@ frontend/
                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │  Core  (src/core/*)                                     │
-│  EventBus · RouterService · Repositories · Settings     │
-│  Toast · StorageAdapter                                 │
+│  AppStore · storeActions · RouterService                │
+│  Repositories · Settings · Toast · StorageAdapter       │
+│  (EventBus is internal to core — not exported to modules)│
 └───────────────────┬─────────────────────────────────────┘
                     │ import from src/ui/* · src/lib/*
                     ▼
@@ -153,6 +160,8 @@ frontend/
 | `ui`        | ✗ | ✓ | ✓ | ✗ |
 | `lib`       | ✗ | ✗ | ✓ | ✗ |
 
+**Additional restriction:** modules must NOT import `core/events` — the EventBus is an internal core detail. Use `api.store.on/off` or import `appStore` from `core/store` instead.
+
 ---
 
 ## 3. Boot Sequence
@@ -166,17 +175,20 @@ index.html
         │     ├── homeModule.register(api)
         │     │     ├── routerService.registerRoute({ path: '/' })
         │     │     ├── routerService.registerNavItem({ label: 'Home' })
-        │     │     └── seedIfEmpty(openMatsRepo)  ← first-run data seed
+        │     │     └── api.store.actions.seedOpenMats(...)  ← first-run data seed
         │     ├── calendarModule.register(api)
         │     │     ├── routerService.registerRoute({ path: '/calendar' })
         │     │     └── routerService.registerRoute({ path: '/calendar/:date' })
         │     ├── messageCenterModule.register(api)
         │     │     ├── routerService.registerRoute({ path: '/messages' })
         │     │     ├── routerService.registerRoute({ path: '/messages/:id' })
-        │     │     ├── eventBus.on('rsvp/created', ...)  ← auto-inbox
-        │     │     └── eventBus.on('rsvp/removed', ...)  ← auto-inbox
-        │     └── settingsModule.register(api)
-        │           └── routerService.registerRoute({ path: '/settings' })
+        │     │     ├── api.store.on('rsvp/created', ...)  ← auto-inbox
+        │     │     └── api.store.on('rsvp/removed', ...)  ← auto-inbox
+        │     ├── settingsModule.register(api)
+        │     │     └── routerService.registerRoute({ path: '/settings' })
+        │     └── devtoolsModule.register(api)
+        │           ├── routerService.registerRoute({ path: '/dev' })
+        │           └── [nav item only if ?dev or bjj_devtools=1]
         4. render(App, #app)
               └── App.tsx reads routerService.getRoutes() — already populated
 ```
@@ -185,28 +197,51 @@ index.html
 
 ## 4. Core Services
 
-### `core/events.ts` — EventBus
+### `core/store.ts` — AppStore
 
-Singleton publish/subscribe bus. All event types are statically declared in `AppEventMap`; TypeScript enforces correct payload shapes at every `emit` and `on` call site.
+Central dispatch choke-point. Every app-wide state change flows through `appStore.dispatch()`, which:
+1. Appends a `LogEntry` to a bounded (1000-entry) in-memory session log (a SolidJS reactive signal).
+2. Emits on the internal EventBus so reactive view subscriptions fire.
 
+```ts
+appStore.dispatch(type, payload, meta?)  // broadcast an action
+appStore.on(type, handler)               // subscribe
+appStore.off(type, handler)              // unsubscribe (always call in onCleanup)
+appStore.log()                           // reactive signal: readonly LogEntry[]
+appStore.clearLog()                      // wipe in-memory log
 ```
-eventBus.emit(type, payload)   — fire an event
-eventBus.on(type, handler)     — subscribe
-eventBus.off(type, handler)    — unsubscribe (always call in onCleanup)
+
+### `core/actions.ts` — storeActions
+
+**The only sanctioned write path for app-wide state.** Each action performs the necessary repository write(s) and then dispatches the corresponding action to the store. Modules must NOT call repository write methods directly for app-wide state — they must use these helpers.
+
+```ts
+storeActions.seedOpenMats(mats)                           // writes + dispatches openmat/seeded
+storeActions.createRsvp({ openMatId, status })            // writes + dispatches rsvp/created (if 'going')
+storeActions.removeRsvp({ rsvpId, openMatId })            // writes + dispatches rsvp/removed
+storeActions.createMessage({ type, title, body })         // writes + dispatches message/created
+storeActions.markMessageRead({ messageId })               // writes + dispatches message/read
+storeActions.setTheme(theme)                              // writes + dispatches settings/themeChanged
+storeActions.resetData({ reSeed? })                       // clears all repos + dispatches data/reset
+                                                          // if reSeed=true (default), also re-seeds
 ```
+
+### `core/events.ts` — EventBus (internal)
+
+Singleton pub/sub bus used internally by `appStore`. **Do not import this from modules.** All event types are declared in `AppEventMap`; TypeScript enforces payload shapes.
 
 ### `core/router.ts` — RouterService
 
 Collects route and nav-item registrations before the app renders. `App.tsx` reads them once (synchronously) after `loadModules`.
 
-```
+```ts
 routerService.registerRoute({ path, component })
 routerService.registerNavItem({ path, label, icon, order?, badge? })
 routerService.getRoutes()    → readonly RouteRegistration[]
 routerService.getNavItems()  → readonly NavItem[]  (sorted by order)
 ```
 
-`NavItem.badge` is an optional `() => number` reactive accessor — used by `BottomNav` to show live unread counts.
+`NavItem.badge` is an optional `() => number` reactive accessor — used by `BottomNav` and `SideNav` to show live unread counts.
 
 ### `core/loader.ts` — Module Loader
 
@@ -304,33 +339,54 @@ repo.clear()          → void
 repo.count()          → number
 ```
 
-**First-run seed** (`lib/mock-data.ts`):
-`seedIfEmpty(openMatsRepo)` — called by the `home` module on every startup; inserts 6 sample open mats only when the collection is empty. The `settings` module can reset via `generateMockOpenMats()` + `repo.clear()`.
+Repositories are **read-only** for modules via `api.store.openMats`. Direct reads (`.list()`, `.get()`) are allowed anywhere. Direct writes (`.set()`, `.remove()`, `.clear()`) for app-wide state must go through `storeActions.*`.
 
 ---
 
-## 7. Event Bus
+## 7. App Store & Action Map
 
-### Full Event Map
+### Full Action Map
 
-| Event | Payload | Emitted by | Consumed by |
+| Action | Payload | Dispatched by | Consumed by |
 |---|---|---|---|
-| `openmat/seeded` | `{ count: number }` | home (seed), settings (reset) | home view, calendar view |
-| `rsvp/created` | `{ rsvp: Rsvp, openMat: OpenMat }` | home view, calendar DayView | message-center (auto-inbox) |
-| `rsvp/removed` | `{ rsvpId: string, openMatId: string }` | home view, calendar DayView | message-center (auto-inbox) |
-| `message/created` | `{ message: Message }` | message-center | inbox view (reactive refresh) |
-| `message/read` | `{ messageId: string }` | MessageDetail (on mount) | inbox view (reactive refresh) |
-| `settings/themeChanged` | `{ theme: 'light' \| 'dark' }` | settings view | — |
-| `data/reset` | `undefined` | settings view | home, calendar, message-center |
+| `openmat/seeded` | `{ count: number }` | `storeActions.seedOpenMats`, `storeActions.resetData` | home view, calendar view |
+| `rsvp/created` | `{ rsvp: Rsvp, openMat: OpenMat }` | `storeActions.createRsvp` | message-center (auto-inbox), DayView refresh |
+| `rsvp/removed` | `{ rsvpId: string, openMatId: string }` | `storeActions.removeRsvp` | message-center (auto-inbox), DayView refresh |
+| `message/created` | `{ message: Message }` | `storeActions.createMessage` | inbox view (reactive refresh) |
+| `message/read` | `{ messageId: string }` | `storeActions.markMessageRead` | inbox view (reactive refresh) |
+| `settings/themeChanged` | `{ theme: 'light' \| 'dark' }` | `storeActions.setTheme` | — |
+| `data/reset` | `undefined` | `storeActions.resetData` | home, calendar, message-center |
 
 ### Pattern: subscribing in a component
 
 ```ts
 // Always clean up in onCleanup to avoid memory leaks
 const handler = () => refresh();
-onMount(() => eventBus.on('openmat/seeded', handler));
-onCleanup(() => eventBus.off('openmat/seeded', handler));
+onMount(() => appStore.on('openmat/seeded', handler));
+onCleanup(() => appStore.off('openmat/seeded', handler));
 ```
+
+Or via the ModuleAPI in `register()`:
+
+```ts
+api.store.on('rsvp/created', ({ rsvp, openMat }) => { ... });
+```
+
+### Session Log (DevtoolsView)
+
+Every dispatched action is logged as a `LogEntry`:
+
+```ts
+interface LogEntry {
+  seq: number;      // monotonically increasing per session
+  ts: string;       // ISO-8601 dispatch timestamp
+  type: string;     // action type key
+  payload: unknown; // raw payload
+  source?: string;  // originating tag (e.g. 'actions')
+}
+```
+
+Access at `/dev` (enable with `?dev` URL param or `bjj_devtools=1` in localStorage).
 
 ---
 
@@ -362,8 +418,9 @@ return (
 | `/messages` | `InboxView` | message-center |
 | `/messages/:id` | `MessageDetail` | message-center |
 | `/settings` | `SettingsView` | settings |
+| `/dev` | `DevtoolsView` | devtools |
 
-**Bottom nav items (sorted by `order`):**
+**Nav items (sorted by `order`):**
 
 | order | Label | Icon | Path | Badge |
 |---|---|---|---|---|
@@ -371,6 +428,7 @@ return (
 | 0.5 | Calendar | `calendar` | `/calendar` | — |
 | 1 | Messages | `message` | `/messages` | unread count |
 | 2 | Settings | `settings` | `/settings` | — |
+| 99 | Devtools | `terminal` | `/dev` | — (only in dev mode) |
 
 ---
 
@@ -392,27 +450,39 @@ interface ModuleAPI {
       order?: number; badge?: () => number;
     }): void;
   };
-  events: {
-    emit<K>(type: K, payload: AppEventMap[K]): void;
-    on<K>(type: K, handler: (payload: AppEventMap[K]) => void): void;
-    off<K>(type: K, handler: (payload: AppEventMap[K]) => void): void;
-  };
+
   store: {
-    openMats: Repository<OpenMat>;
-    rsvps:    Repository<Rsvp>;
-    messages: Repository<Message>;
+    /** Dispatch an action (logs it + emits on the event bus). */
+    dispatch<K extends keyof AppActionMap>(
+      type: K, payload: AppActionMap[K], meta?: { source?: string }
+    ): void;
+    /** Subscribe to an action type. */
+    on<K extends keyof AppActionMap>(
+      type: K, handler: (payload: AppActionMap[K]) => void
+    ): void;
+    /** Unsubscribe from an action type. */
+    off<K extends keyof AppActionMap>(
+      type: K, handler: (payload: AppActionMap[K]) => void
+    ): void;
+    /** Reactive signal — returns the bounded session log. */
+    log(): readonly LogEntry[];
+    /** Read-only access to the open mats repository (for lookups). */
+    openMats: typeof openMatsRepo;
+    /** Typed action helpers — the sanctioned write path for app state. */
+    actions: typeof storeActions;
   };
+
   ui: {
-    toast(message: string, kind?: 'success'|'error'|'info'|'warning'): void;
+    toast(message: string, kind?: ToastKind): void;
   };
+
   settings: {
     getTheme(): 'light' | 'dark';
-    setTheme(theme: 'light' | 'dark'): void;
   };
 }
 ```
 
-> Modules may also import core singletons directly (`eventBus`, `openMatsRepo`, etc.) since all their source locations are in `src/core/*`, which is an allowed import layer. The `ModuleAPI` is primarily used inside `register()` itself.
+> Views may also import `appStore` from `core/store` and `storeActions` from `core/actions` directly (both are in `src/core/*`, an allowed layer). The `api` object is the primary interface inside `register()` itself.
 
 ---
 
@@ -424,12 +494,12 @@ interface ModuleAPI {
 |---|---|
 | Routes | `/` |
 | Nav | Home (order 0) |
-| On register | Seeds mock data via `seedIfEmpty(openMatsRepo)` |
-| Emits | `openmat/seeded`, `rsvp/created`, `rsvp/removed` |
+| On register | Seeds mock data: `api.store.actions.seedOpenMats(generateMockOpenMats())` if repo is empty |
+| Dispatches | `openmat/seeded` (via storeActions), `rsvp/created`, `rsvp/removed` |
 | Listens | `openmat/seeded`, `data/reset` |
 
 **Files:**
-- `HomeView.tsx` — groups open mats by day label (Today / Tomorrow / date), renders `OpenMatCard` for each.
+- `HomeView.tsx` — groups open mats by day label (Today / Tomorrow / date), renders `OpenMatCard` for each. RSVP handled via `storeActions.createRsvp` / `storeActions.removeRsvp`.
 - `OpenMatCard.tsx` — shows gym name, time, address, notes, capacity; RSVP toggle button. Going state reflected visually.
 
 ### `calendar`
@@ -439,12 +509,12 @@ interface ModuleAPI {
 | Routes | `/calendar`, `/calendar/:date` |
 | Nav | Calendar (order 0.5) |
 | On register | Nothing (reads data on demand) |
-| Emits | `rsvp/created`, `rsvp/removed` |
+| Dispatches | `rsvp/created`, `rsvp/removed` (via storeActions) |
 | Listens | `openmat/seeded`, `data/reset`, `rsvp/created`, `rsvp/removed` |
 
 **Files:**
 - `CalendarView.tsx` — month grid (Sun–Sat), prev/next navigation, accent pip dots for days with open mats (up to 3 dots, then `+N`). Today highlighted with accent circle.
-- `DayView.tsx` — lists open mats for the tapped day. Going / Not Going buttons (tapping active status removes RSVP).
+- `DayView.tsx` — lists open mats for the tapped day. Going / Not Going buttons (tapping active status removes RSVP via `storeActions.removeRsvp`).
 
 **Month grid algorithm** (`lib/calendarUtils.ts`):
 1. Find `startDow` = day-of-week of the 1st (0=Sun).
@@ -458,13 +528,13 @@ interface ModuleAPI {
 |---|---|
 | Routes | `/messages`, `/messages/:id` |
 | Nav | Messages (order 1, badge = unread count) |
-| On register | Subscribes to `rsvp/created` + `rsvp/removed` to auto-create inbox messages |
-| Emits | `message/created` |
+| On register | `api.store.on('rsvp/created', ...)` + `api.store.on('rsvp/removed', ...)` to auto-create inbox messages via `api.store.actions.createMessage` |
+| Dispatches | `message/created`, `message/read` (via storeActions) |
 | Listens | `rsvp/created`, `rsvp/removed`, `data/reset`, `message/created`, `message/read` |
 
 **Files:**
 - `InboxView.tsx` — sorted message list, bold title for unread, accent dot indicator.
-- `MessageDetail.tsx` — marks message read (`readAt` timestamp) on mount, emits `message/read`.
+- `MessageDetail.tsx` — marks message read via `storeActions.markMessageRead({ messageId })` on mount.
 - `unreadCount.ts` — module-scoped SolidJS signal. Exported as a `() => number` accessor and plugged directly into the nav item's `badge` field. Updated by `refreshUnreadCount()`.
 
 ### `settings`
@@ -474,11 +544,29 @@ interface ModuleAPI {
 | Routes | `/settings` |
 | Nav | Settings (order 2) |
 | On register | Nothing |
-| Emits | `settings/themeChanged`, `data/reset`, `openmat/seeded` |
+| Dispatches | `settings/themeChanged`, `data/reset`, `openmat/seeded` (all via storeActions) |
 | Listens | — |
 
 **Files:**
-- `SettingsView.tsx` — dark/light toggle, Reset (clear + reseed) button, Clear All button. Reset/Clear confirmed with `Modal`.
+- `SettingsView.tsx` — dark/light toggle via `storeActions.setTheme`, Reset (clear + reseed) via `storeActions.resetData({ reSeed: true })`, Clear All via `storeActions.resetData({ reSeed: false })`. Reset confirmed with `Modal`.
+
+### `devtools`
+
+| | |
+|---|---|
+| Routes | `/dev` (always registered) |
+| Nav | Devtools / terminal (order 99, only when dev mode active) |
+| On register | Checks `?dev` param or `bjj_devtools` localStorage; registers nav item if enabled |
+| Dispatches | — |
+| Listens | — (reads `appStore.log()` reactively) |
+
+**Activating dev mode:**
+- Visit `?dev` in the URL — persists `bjj_devtools=1` to localStorage.
+- Or set `localStorage.setItem('bjj_devtools', '1')` manually.
+- "Disable Devtools" button removes the key and redirects to `/`.
+
+**Files:**
+- `DevtoolsView.tsx` — reactive action log (newest-first), type filter input, Clear Log / Reset Data / Disable Devtools buttons.
 
 ---
 
@@ -500,8 +588,18 @@ All values are CSS custom properties on `:root`. Dark is the default; `[data-the
 | Typography | `--text-xs` … `--text-2xl`, `--weight-*`, `--leading-*` |
 | Shadows | `--shadow-sm/md/lg` |
 | Motion | `--ease-fast/normal/slow/spring` |
-| Layout | `--top-bar-height: 56px`, `--bottom-nav-height: 64px`, `--content-max-width: 600px` |
+| Layout | `--top-bar-height: 56px`, `--bottom-nav-height: 64px`, `--content-max-width: 600px`, `--side-nav-width: 220px` |
 | Safe areas | `--safe-top`, `--safe-bottom` (env() values for notched devices) |
+
+### Responsive Layout
+
+| Breakpoint | Layout |
+|---|---|
+| `<900px` (mobile) | TopBar + content + BottomNav |
+| `≥900px` (tablet/desktop) | SideNav (220px rail) + content; BottomNav hidden |
+| `≥1200px` (wide desktop) | SideNav widens to 240px; content max-width 1280px |
+
+`.mats-grid` — 1 col mobile → 2 col at 900px → 3 col at 1200px.
 
 ### Components (`src/ui/components/`)
 
@@ -521,13 +619,14 @@ All values are CSS custom properties on `:root`. Dark is the default; `[data-the
 | `ListRow` | `title`, `subtitle?`, `leading?`, `trailing?`, `chevron?`, `unread?` |
 | `Divider` | `label?` — labelled rule |
 | `TopBar` | `title`, `leading?`, `trailing?` |
-| `BottomNav` | `items: NavItem[]` — uses `useLocation` for active state |
+| `SideNav` | `items: NavItem[]` — desktop rail nav, uses `<A activeClass end>` |
+| `BottomNav` | `items: NavItem[]` — mobile tab bar, uses `<A activeClass end>` |
 
 ### Icons (`src/ui/icons.tsx`)
 
 All icons are inline SVG, no external dependency. Factory pattern: `const SomeIcon = icon(<path d="..." />)`.
 
-Available icons: `HomeIcon`, `MessageIcon`, `BellIcon`, `SettingsIcon`, `CalendarIcon`, `CheckIcon`, `CloseIcon`, `ChevronRightIcon`, `ChevronLeftIcon`, `MapPinIcon`, `ClockIcon`, `PeopleIcon`, `TrashIcon`, `RefreshIcon`, `MoonIcon`, `SunIcon`, `InfoIcon`, `PlusIcon`, `MatIcon`.
+Available icons: `HomeIcon`, `MessageIcon`, `BellIcon`, `SettingsIcon`, `CalendarIcon`, `CheckIcon`, `CloseIcon`, `ChevronRightIcon`, `ChevronLeftIcon`, `MapPinIcon`, `ClockIcon`, `PeopleIcon`, `TrashIcon`, `RefreshIcon`, `MoonIcon`, `SunIcon`, `InfoIcon`, `PlusIcon`, `MatIcon`, `TerminalIcon`.
 
 `getIcon(name: string)` maps nav item icon keys to components:
 
@@ -539,6 +638,7 @@ Available icons: `HomeIcon`, `MessageIcon`, `BellIcon`, `SettingsIcon`, `Calenda
 | `settings` | SettingsIcon |
 | `bell` | BellIcon |
 | `mat` | MatIcon |
+| `terminal` | TerminalIcon |
 | _(unknown)_ | InfoIcon |
 
 ---
@@ -549,22 +649,28 @@ Enforced by `eslint.config.js` using `no-restricted-imports` patterns.
 
 **Rule 1 — Modules cannot import other modules:**
 Files inside `src/modules/foo/*` may not import from `src/modules/bar/*`.
-✓ `../../core/events` — allowed
+✓ `../../core/store` — allowed
 ✓ `./OpenMatCard` — allowed (same module)
 ✗ `../message-center/unreadCount` — blocked
 
-**Rule 2 — Core cannot import modules:**
+**Rule 2 — Modules cannot import core/events:**
+The EventBus is an internal core detail. Use `api.store.on/off` (in `register()`) or import `appStore` from `core/store` (in view files) instead.
+✗ `../../core/events` — blocked
+✓ `../../core/store` — allowed
+✓ `../../core/actions` — allowed
+
+**Rule 3 — Core cannot import modules:**
 Files inside `src/core/*` may not import from `src/modules/**`.
-Exception: `src/registry.ts` (typed as `app`) is explicitly exempt.
+Exception: `src/registry.ts` (app-level) is explicitly exempt.
 
 **Permitted import graph:**
 ```
 registry.ts  →  modules  →  core  →  lib
-                         →  ui    →  lib
-                         →  lib
+                          →  ui    →  lib
+                          →  lib
 ```
 
-To **verify** boundaries: `npx eslint src/`
+To **verify** boundaries: `bun run lint` (or `npx eslint src/`)
 
 ---
 
@@ -590,11 +696,11 @@ const myModule: Module = {
       path: '/my-feature',
       label: 'My Feature',
       icon: 'mat',          // any key from getIcon()
-      order: 3,             // position in bottom nav
+      order: 3,             // position in nav
     });
 
-    // Subscribe to events if needed
-    api.events.on('rsvp/created', ({ openMat }) => {
+    // Subscribe to actions if needed
+    api.store.on('rsvp/created', ({ openMat }) => {
       // react to RSVPs...
     });
   },
@@ -613,17 +719,18 @@ export const moduleRegistry: readonly Module[] = [
   myModule,          // ← add here
   messageCenterModule,
   settingsModule,
+  devtoolsModule,
 ];
 ```
 
 **Step 4 — Add a nav icon key** (if using a new name):
-In `src/ui/icons.tsx`, add the key to the `getIcon` map.
+In `src/ui/icons.tsx`, add the export and add the key to the `getIcon` map.
 
-**Step 5 — Add new events** (if needed):
-In `src/core/events.ts`, extend `AppEventMap`. TypeScript will then enforce the payload shape everywhere.
+**Step 5 — Add new actions** (if needed):
+In `src/core/events.ts`, extend `AppEventMap`. Add the corresponding action helper to `src/core/actions.ts`. TypeScript will then enforce the payload shape everywhere.
 
 **Step 6 — Verify:**
 ```bash
 bun run build    # TypeScript + Vite build — must pass clean
-npx eslint src/  # Boundary rules — must pass with 0 warnings
+bun run lint     # Boundary rules — must pass with 0 warnings
 ```

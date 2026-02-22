@@ -3,7 +3,7 @@ import { createSignal, For, Show, onMount, onCleanup } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
 import { messagesRepo } from '../../core/storage/messages.repo';
 import type { Message } from '../../core/storage/messages.repo';
-import { eventBus } from '../../core/events';
+import { appStore } from '../../core/store';
 import { timeAgo } from '../../lib/utils';
 import { ListRow } from '../../ui/components/ListRow';
 import { Badge } from '../../ui/components/Badge';
@@ -27,19 +27,15 @@ export function InboxView(): JSX.Element {
     refreshUnreadCount();
   };
 
-  const onNew = () => refresh();
-  const onRead = () => refresh();
-  const onReset = () => refresh();
-
   onMount(() => {
-    eventBus.on('message/created', onNew);
-    eventBus.on('message/read', onRead);
-    eventBus.on('data/reset', onReset);
+    appStore.on('message/created', refresh);
+    appStore.on('message/read', refresh);
+    appStore.on('data/reset', refresh);
   });
   onCleanup(() => {
-    eventBus.off('message/created', onNew);
-    eventBus.off('message/read', onRead);
-    eventBus.off('data/reset', onReset);
+    appStore.off('message/created', refresh);
+    appStore.off('message/read', refresh);
+    appStore.off('data/reset', refresh);
   });
 
   const unreadCount = () => messages().filter((m) => !m.readAt).length;

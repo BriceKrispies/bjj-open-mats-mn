@@ -1,32 +1,37 @@
 /**
  * src/core/module.ts
  *
- * Defines the public contract every feature module must satisfy.
- * The ModuleAPI wraps all core services into one typed object that
- * is injected into each module's `register()` call.
+ * Public contract every feature module must satisfy.
+ * The ModuleAPI wraps all core services into one typed object that is
+ * injected into each module's `register()` call.
  *
  * IMPORTANT: This file may NOT import module implementations.
+ *
+ * Key rules for module authors:
+ *   - All app-wide state mutations go through api.store.actions.*
+ *   - Subscribe / unsubscribe via api.store.on / api.store.off
+ *   - Never import src/core/events directly — that boundary is ESLint-enforced.
  */
 
 import type { RouteRegistration, NavItem } from './router';
 import type { OpenMat } from './storage/openMats.repo';
 import type { Rsvp } from './storage/rsvps.repo';
 import type { Message } from './storage/messages.repo';
-import type { AppEventMap } from './events';
+import type { AppActionMap, LogEntry } from './store';
 import type { ToastKind } from './toast';
 
 import { routerService } from './router';
-import { eventBus } from './events';
 import { openMatsRepo } from './storage/openMats.repo';
-import { rsvpsRepo } from './storage/rsvps.repo';
-import { messagesRepo } from './storage/messages.repo';
 import { showToast } from './toast';
 import { settingsService } from './settings';
+import { appStore } from './store';
+import { storeActions } from './actions';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Re-export data types so modules only need to import from '@core/module'
+// Re-export data types so modules can import from core/module instead of
+// reaching into individual core sub-files.
 // ─────────────────────────────────────────────────────────────────────────────
-export type { RouteRegistration, NavItem, OpenMat, Rsvp, Message, AppEventMap };
+export type { RouteRegistration, NavItem, OpenMat, Rsvp, Message, AppActionMap, LogEntry };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Module contract
@@ -36,28 +41,39 @@ export interface ModuleAPI {
     registerRoute(route: RouteRegistration): void;
     registerNavItem(item: NavItem): void;
   };
-  events: {
-    emit<K extends keyof AppEventMap>(type: K, payload: AppEventMap[K]): void;
-    on<K extends keyof AppEventMap>(
-      type: K,
-      handler: (payload: AppEventMap[K]) => void,
-    ): void;
-    off<K extends keyof AppEventMap>(
-      type: K,
-      handler: (payload: AppEventMap[K]) => void,
-    ): void;
-  };
+
   store: {
+    /** Dispatch an action (logs it + emits on the event bus). */
+    dispatch<K extends keyof AppActionMap>(
+      type: K,
+      payload: AppActionMap[K],
+      meta?: { source?: string },
+    ): void;
+    /** Subscribe to an action type. */
+    on<K extends keyof AppActionMap>(
+      type: K,
+      handler: (payload: AppActionMap[K]) => void,
+    ): void;
+    /** Unsubscribe from an action type. */
+    off<K extends keyof AppActionMap>(
+      type: K,
+      handler: (payload: AppActionMap[K]) => void,
+    ): void;
+    /** Reactive signal — returns the bounded session log. */
+    log(): readonly LogEntry[];
+    /** Read-only access to the open mats repository (for lookups). */
     openMats: typeof openMatsRepo;
-    rsvps: typeof rsvpsRepo;
-    messages: typeof messagesRepo;
+    /** Typed action helpers — the sanctioned write path for app state. */
+    actions: typeof storeActions;
   };
+
   ui: {
     toast(message: string, kind?: ToastKind): void;
   };
+
   settings: {
-    getTheme: () => 'light' | 'dark';
-    setTheme(theme: 'light' | 'dark'): void;
+    /** Reactive accessor — use inside SolidJS reactive roots. */
+    getTheme(): 'light' | 'dark';
   };
 }
 
@@ -75,22 +91,19 @@ export function createModuleAPI(): ModuleAPI {
       registerRoute: (r) => routerService.registerRoute(r),
       registerNavItem: (i) => routerService.registerNavItem(i),
     },
-    events: {
-      emit: (type, payload) => eventBus.emit(type, payload),
-      on: (type, handler) => eventBus.on(type, handler),
-      off: (type, handler) => eventBus.off(type, handler),
-    },
     store: {
+      dispatch: (type, payload, meta) => appStore.dispatch(type, payload, meta),
+      on: (type, handler) => appStore.on(type, handler),
+      off: (type, handler) => appStore.off(type, handler),
+      log: appStore.log,
       openMats: openMatsRepo,
-      rsvps: rsvpsRepo,
-      messages: messagesRepo,
+      actions: storeActions,
     },
     ui: {
       toast: showToast,
     },
     settings: {
       getTheme: settingsService.getTheme,
-      setTheme: (t) => settingsService.setTheme(t),
     },
   };
 }

@@ -73,7 +73,15 @@ export default [
               group: ['**/modules/!(.)*/'],
               message:
                 'Modules must not import from other modules. ' +
-                'Use the EventBus or Storage from src/core/* for cross-module communication.',
+                'Use api.store.on/off and api.store.actions.* for cross-module communication.',
+            },
+            {
+              // Forbid direct imports of the internal EventBus from modules.
+              // Modules must use api.store.on/off and api.store.actions.* instead.
+              group: ['**/core/events', '**/core/events.ts'],
+              message:
+                'Modules must not import core/events directly. ' +
+                'Use api.store.on/off for subscriptions and api.store.actions.* for writes.',
             },
           ],
         },

@@ -110,7 +110,11 @@ export const MatIcon = icon(
   </>,
 );
 
-/** Returns an icon component by string key (used by BottomNav). */
+export const TerminalIcon = icon(
+  <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10zm-9-1h7v-2h-7v2zM6.5 9.5L5.09 10.91 7.17 13l-2.08 2.09L6.5 16.5l3.5-3.5-3.5-3.5z" />,
+);
+
+/** Returns an icon component by string key (used by BottomNav / SideNav). */
 export function getIcon(name: string): (props: IconProps) => JSX.Element {
   const map: Record<string, (props: IconProps) => JSX.Element> = {
     home: HomeIcon,
@@ -119,6 +123,7 @@ export function getIcon(name: string): (props: IconProps) => JSX.Element {
     settings: SettingsIcon,
     bell: BellIcon,
     mat: MatIcon,
+    terminal: TerminalIcon,
   };
   return map[name] ?? InfoIcon;
 }

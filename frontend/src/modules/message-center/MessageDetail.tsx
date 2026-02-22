@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 import { Show, onMount } from 'solid-js';
 import { useParams, useNavigate } from '@solidjs/router';
 import { messagesRepo } from '../../core/storage/messages.repo';
-import { eventBus } from '../../core/events';
+import { storeActions } from '../../core/actions';
 import { formatDateTime } from '../../lib/utils';
 import { Button } from '../../ui/components/Button';
 import { ChevronLeftIcon, BellIcon } from '../../ui/icons';
@@ -16,8 +16,7 @@ export function MessageDetail(): JSX.Element {
   onMount(() => {
     const msg = message();
     if (msg && !msg.readAt) {
-      messagesRepo.set({ ...msg, readAt: new Date().toISOString() });
-      eventBus.emit('message/read', { messageId: msg.id });
+      storeActions.markMessageRead({ messageId: msg.id });
       refreshUnreadCount();
     }
   });

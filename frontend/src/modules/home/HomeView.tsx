@@ -1,14 +1,15 @@
 import type { JSX } from 'solid-js';
 import { createSignal, For, Show, onMount, onCleanup } from 'solid-js';
 import { openMatsRepo } from '../../core/storage/openMats.repo';
+import type { OpenMat } from '../../core/storage/openMats.repo';
 import { rsvpsRepo } from '../../core/storage/rsvps.repo';
 import type { Rsvp } from '../../core/storage/rsvps.repo';
-import { eventBus } from '../../core/events';
+import { appStore } from '../../core/store';
+import { storeActions } from '../../core/actions';
 import { showToast } from '../../core/toast';
-import { uid, dayLabel } from '../../lib/utils';
+import { dayLabel } from '../../lib/utils';
 import { OpenMatCard } from './OpenMatCard';
 import { MatIcon } from '../../ui/icons';
-import type { OpenMat } from '../../core/storage/openMats.repo';
 
 function greeting(): string {
   const h = new Date().getHours();
@@ -27,15 +28,19 @@ export function HomeView(): JSX.Element {
     setRsvps(rsvpsRepo.list());
   };
 
-  onMount(() => eventBus.on('openmat/seeded', onSeeded));
-  onCleanup(() => eventBus.off('openmat/seeded', onSeeded));
-
   const onDataReset = () => {
     setOpenMats(openMatsRepo.list());
     setRsvps([]);
   };
-  onMount(() => eventBus.on('data/reset', onDataReset));
-  onCleanup(() => eventBus.off('data/reset', onDataReset));
+
+  onMount(() => {
+    appStore.on('openmat/seeded', onSeeded);
+    appStore.on('data/reset', onDataReset);
+  });
+  onCleanup(() => {
+    appStore.off('openmat/seeded', onSeeded);
+    appStore.off('data/reset', onDataReset);
+  });
 
   const rsvpFor = (openMatId: string) =>
     rsvps().find((r) => r.openMatId === openMatId);
@@ -43,20 +48,12 @@ export function HomeView(): JSX.Element {
   const handleRsvp = (openMat: OpenMat) => {
     const existing = rsvpFor(openMat.id);
     if (existing) {
-      rsvpsRepo.remove(existing.id);
+      storeActions.removeRsvp({ rsvpId: existing.id, openMatId: openMat.id });
       setRsvps(rsvpsRepo.list());
-      eventBus.emit('rsvp/removed', { rsvpId: existing.id, openMatId: openMat.id });
       showToast('RSVP removed', 'info');
     } else {
-      const rsvp: Rsvp = {
-        id: uid(),
-        openMatId: openMat.id,
-        status: 'going',
-        createdAt: new Date().toISOString(),
-      };
-      rsvpsRepo.set(rsvp);
+      storeActions.createRsvp({ openMatId: openMat.id, status: 'going' });
       setRsvps(rsvpsRepo.list());
-      eventBus.emit('rsvp/created', { rsvp, openMat });
       showToast(`RSVP'd to ${openMat.gymName}! 🥋`, 'success');
     }
   };

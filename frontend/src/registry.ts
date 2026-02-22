@@ -12,10 +12,12 @@ import homeModule from './modules/home';
 import calendarModule from './modules/calendar';
 import messageCenterModule from './modules/message-center';
 import settingsModule from './modules/settings';
+import devtoolsModule from './modules/devtools';
 
 export const moduleRegistry: readonly Module[] = [
   homeModule,
   calendarModule,
   messageCenterModule,
   settingsModule,
+  devtoolsModule,
 ];

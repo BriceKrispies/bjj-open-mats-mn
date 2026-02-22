@@ -1,12 +1,8 @@
 import type { JSX } from 'solid-js';
 import { createSignal } from 'solid-js';
 import { settingsService } from '../../core/settings';
-import { openMatsRepo } from '../../core/storage/openMats.repo';
-import { rsvpsRepo } from '../../core/storage/rsvps.repo';
-import { messagesRepo } from '../../core/storage/messages.repo';
-import { eventBus } from '../../core/events';
+import { storeActions } from '../../core/actions';
 import { showToast } from '../../core/toast';
-import { generateMockOpenMats } from '../../lib/mock-data';
 import { Button } from '../../ui/components/Button';
 import { Modal } from '../../ui/components/Modal';
 import { SunIcon, MoonIcon, TrashIcon, RefreshIcon, MatIcon } from '../../ui/icons';
@@ -16,24 +12,11 @@ export function SettingsView(): JSX.Element {
   const [showResetModal, setShowResetModal] = createSignal(false);
 
   const toggleTheme = () => {
-    const next = isDark() ? 'light' : 'dark';
-    settingsService.setTheme(next);
-    eventBus.emit('settings/themeChanged', { theme: next });
+    storeActions.setTheme(isDark() ? 'light' : 'dark');
   };
 
   const handleReset = () => {
-    // Clear all data
-    openMatsRepo.clear();
-    rsvpsRepo.clear();
-    messagesRepo.clear();
-
-    // Re-seed open mats with fresh mock data
-    const mats = generateMockOpenMats();
-    mats.forEach((m) => openMatsRepo.set(m));
-
-    eventBus.emit('data/reset', undefined);
-    eventBus.emit('openmat/seeded', { count: mats.length });
-
+    storeActions.resetData({ reSeed: true });
     setShowResetModal(false);
     showToast('Data has been reset with fresh sample events.', 'info');
   };
@@ -91,7 +74,7 @@ export function SettingsView(): JSX.Element {
               <Button
                 variant={!isDark() ? 'primary' : 'secondary'}
                 size="sm"
-                onClick={() => settingsService.setTheme('light')}
+                onClick={() => storeActions.setTheme('light')}
                 style={{ flex: 1 }}
               >
                 <SunIcon size={16} />
@@ -100,7 +83,7 @@ export function SettingsView(): JSX.Element {
               <Button
                 variant={isDark() ? 'primary' : 'secondary'}
                 size="sm"
-                onClick={() => settingsService.setTheme('dark')}
+                onClick={() => storeActions.setTheme('dark')}
                 style={{ flex: 1 }}
               >
                 <MoonIcon size={16} />
@@ -144,10 +127,7 @@ export function SettingsView(): JSX.Element {
                 variant="danger"
                 size="sm"
                 onClick={() => {
-                  openMatsRepo.clear();
-                  rsvpsRepo.clear();
-                  messagesRepo.clear();
-                  eventBus.emit('data/reset', undefined);
+                  storeActions.resetData({ reSeed: false });
                   showToast('All data cleared.', 'warning');
                 }}
                 style={{ 'flex-shrink': '0' }}

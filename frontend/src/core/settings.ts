@@ -6,7 +6,7 @@ const THEME_KEY = 'bjj_theme';
 type Theme = 'light' | 'dark';
 
 function readStoredTheme(): Theme {
-  return storage.getItem<Theme>(THEME_KEY) ?? 'dark';
+  return storage.getItem<Theme>(THEME_KEY) ?? 'light';
 }
 
 function applyTheme(t: Theme): void {

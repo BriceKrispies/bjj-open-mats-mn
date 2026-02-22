@@ -11,7 +11,8 @@
       "Bash(cd /c/dev/bjj-open-mats-site/frontend && npm install --legacy-peer-deps 2>&1 && npm audit 2>&1)",
       "Bash(cd /c/dev/bjj-open-mats-site/frontend && bun run build 2>&1)",
       "Bash(cd /c/dev/bjj-open-mats-site/frontend && npx eslint src/ 2>&1)",
-      "Bash(cd /c/dev/bjj-open-mats-site/frontend && bun run build 2>&1 | tail -5 && npx eslint src/ 2>&1)"
+      "Bash(cd /c/dev/bjj-open-mats-site/frontend && bun run build 2>&1 | tail -5 && npx eslint src/ 2>&1)",
+      "Bash(bun run:*)"
     ]
   }
 }
