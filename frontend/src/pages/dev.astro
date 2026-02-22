@@ -1,0 +1,73 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Dev" currentPath="/dev">
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title">Event Log</h1>
+      <span class="page-header__subtitle" id="log-count">0 events</span>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn btn--sm" id="clear-log-btn">Clear Log</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="dev-toolbar">
+      <span class="dev-count" style="font-family:var(--font-mono);">Time · Kind · Type · Payload</span>
+    </div>
+    <div id="log-content">
+      <div class="empty-state">No events yet — navigate or interact with the app.</div>
+    </div>
+  </div>
+</AppLayout>
+
+<script>
+  import { store } from '../core/store';
+  import { bootstrap } from '../registry';
+  import { getLog, clearLog } from '../core/eventLog';
+  import { formatLogEntries } from '../modules/dev/devViewModel';
+
+  bootstrap();
+
+  function esc(s: string): string {
+    const el = document.createElement('span');
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
+  function render() {
+    const content = document.getElementById('log-content');
+    const count = document.getElementById('log-count');
+    if (!content || !count) return;
+
+    const entries = formatLogEntries(getLog());
+    count.textContent = `${entries.length} event${entries.length !== 1 ? 's' : ''}`;
+
+    if (entries.length === 0) {
+      content.innerHTML = '<div class="empty-state">No events yet — navigate or interact with the app.</div>';
+      return;
+    }
+
+    content.innerHTML = entries.map(e => `
+      <div class="log-entry">
+        <span class="log-entry__time">${esc(e.timeFormatted)}</span>
+        <span class="log-entry__kind log-entry__kind--${esc(e.kind)}">${esc(e.kind)}</span>
+        <span class="log-entry__type">${esc(e.type)}</span>
+        <span class="log-entry__payload">${esc(e.preview)}</span>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('clear-log-btn')?.addEventListener('click', () => {
+    clearLog();
+    render();
+  });
+
+  // Initial render — reads directly from sessionStorage, so log from any page is visible immediately
+  render();
+
+  // Re-render after every store dispatch (new actions will have been appended to sessionStorage)
+  store.subscribe(() => render());
+</script>

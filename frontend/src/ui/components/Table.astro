@@ -1,0 +1,15 @@
+---
+/**
+ * Table component — wraps content in a styled data-table.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const classes = ['data-table', className].filter(Boolean).join(' ');
+---
+
+<table class={classes}>
+  <slot />
+</table>

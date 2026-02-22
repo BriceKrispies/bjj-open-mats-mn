@@ -1,0 +1,18 @@
+---
+/**
+ * CalendarGrid component — the month grid shell.
+ * Content (day-of-week headers + cells) is provided as a slot,
+ * typically rendered dynamically via client script.
+ */
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id, class: className } = Astro.props;
+const classes = ['cal-grid', className].filter(Boolean).join(' ');
+---
+
+<div class={classes} id={id}>
+  <slot />
+</div>

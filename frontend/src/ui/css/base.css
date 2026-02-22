@@ -1,0 +1,109 @@
+/* ── Base: Reset + Typography + Layout ── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: var(--lh-normal);
+    color: var(--c-text);
+    background: var(--c-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Kill default list styles everywhere */
+  ul, ol, menu {
+    list-style: none;
+  }
+
+  a {
+    color: var(--c-primary);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  img, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  h1 { font-size: var(--fs-2xl); }
+  h2 { font-size: var(--fs-xl); }
+  h3 { font-size: var(--fs-lg); }
+  h4 { font-size: var(--fs-md); }
+
+  p + p { margin-top: var(--sp-3); }
+
+  code, pre, kbd {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+  }
+
+  pre {
+    overflow-x: auto;
+    padding: var(--sp-3);
+    background: var(--c-bg);
+    border: var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* ─ Layout ─ */
+  .container {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--sp-6);
+  }
+  @media (max-width: 640px) {
+    .container {
+      padding-inline: var(--sp-4);
+    }
+  }
+
+  .app-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: var(--sp-12);
+    scrollbar-width: none;
+  }
+  .app-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+}

@@ -1,60 +1,47 @@
-import type { OpenMat } from './storage/openMats.repo';
-import type { Rsvp } from './storage/rsvps.repo';
-import type { Message } from './storage/messages.repo';
+// ── Typed Event Bus ──
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Typed event map — add new event types here as the app grows.
-// ─────────────────────────────────────────────────────────────────────────────
-export interface AppEventMap {
-  /** Fired after the mock data seed runs. */
+import type { OpenMat, Rsvp } from './state';
+import { appendLog, compactPreview } from './eventLog';
+
+/** All app action/event types and their payloads */
+export interface AppActionMap {
   'openmat/seeded': { count: number };
-
-  /** Fired when the user RSVPs to an open mat. */
-  'rsvp/created': { rsvp: Rsvp; openMat: OpenMat };
-
-  /** Fired when the user removes their RSVP. */
-  'rsvp/removed': { rsvpId: string; openMatId: string };
-
-  /** Fired when a new message is added to the inbox. */
-  'message/created': { message: Message };
-
-  /** Fired when a message is opened/read. */
-  'message/read': { messageId: string };
-
-  /** Fired when the user changes the color theme. */
+  'rsvp/toggled': { rsvp: Rsvp; openMat: OpenMat };
+  'rsvp/removed': { openMatId: string };
   'settings/themeChanged': { theme: 'light' | 'dark' };
-
-  /** Fired after a full data reset. */
   'data/reset': undefined;
 }
 
-type Handler<T> = (payload: T) => void;
+export type AppActionType = keyof AppActionMap;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EventBus implementation
-// ─────────────────────────────────────────────────────────────────────────────
-class EventBus {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly listeners = new Map<string, Set<Handler<any>>>();
+export interface AppAction<T extends AppActionType = AppActionType> {
+  type: T;
+  payload: AppActionMap[T];
+}
 
-  emit<K extends keyof AppEventMap>(type: K, payload: AppEventMap[K]): void {
-    const handlers = this.listeners.get(type as string);
-    if (handlers) {
-      // Iterate over a snapshot so handlers that call `off` mid-loop are safe.
-      [...handlers].forEach((h) => h(payload));
+type Listener<T extends AppActionType> = (payload: AppActionMap[T]) => void;
+
+export class EventBus {
+  private listeners = new Map<string, Set<Function>>();
+
+  on<T extends AppActionType>(type: T, fn: Listener<T>): () => void {
+    if (!this.listeners.has(type)) {
+      this.listeners.set(type, new Set());
     }
+    this.listeners.get(type)!.add(fn);
+    return () => this.listeners.get(type)?.delete(fn);
   }
 
-  on<K extends keyof AppEventMap>(type: K, handler: Handler<AppEventMap[K]>): void {
-    if (!this.listeners.has(type as string)) {
-      this.listeners.set(type as string, new Set());
-    }
-    this.listeners.get(type as string)!.add(handler);
+  off<T extends AppActionType>(type: T, fn: Listener<T>): void {
+    this.listeners.get(type)?.delete(fn);
   }
 
-  off<K extends keyof AppEventMap>(type: K, handler: Handler<AppEventMap[K]>): void {
-    this.listeners.get(type as string)?.delete(handler);
+  emit<T extends AppActionType>(type: T, payload: AppActionMap[T]): void {
+    // Log every emit to the session event log
+    appendLog({ kind: 'event', type: String(type), preview: compactPreview(payload) });
+    this.listeners.get(type)?.forEach(fn => (fn as Listener<T>)(payload));
   }
 }
 
+/** Singleton event bus */
 export const eventBus = new EventBus();

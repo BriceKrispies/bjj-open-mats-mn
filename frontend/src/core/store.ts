@@ -1,87 +1,113 @@
-/**
- * src/core/store.ts
- *
- * Central application store — the single dispatch choke-point for all
- * app-wide actions.
- *
- * - Every dispatched action is appended to an in-memory, bounded session log.
- * - Internally delegates to the EventBus so existing reactive patterns work.
- * - The EventBus is NOT exported from this file; modules must use the store.
- */
+// ── Central Store (Redux-ish) ──
 
-import { createSignal } from 'solid-js';
-import type { AppEventMap } from './events';
+import type { AppState, OpenMat, Rsvp } from './state';
+import { defaultState } from './state';
+import type { AppAction, AppActionType, AppActionMap } from './events';
 import { eventBus } from './events';
+import { appendLog, compactPreview } from './eventLog';
+import { loadKey, saveKey, clearAll } from './persistence';
+import { seedOpenMats } from './repositories/openMats';
 
-/** The canonical typed action map (mirrors AppEventMap). */
-export type AppActionMap = AppEventMap;
+// ── Reducer ──
 
-export interface LogEntry {
-  /** Monotonically increasing sequence number, resets each session. */
-  seq: number;
-  /** ISO-8601 timestamp at dispatch time. */
-  ts: string;
-  /** Action type key (e.g. "rsvp/created"). */
-  type: string;
-  /** Raw payload — may be undefined for actions like data/reset. */
-  payload: unknown;
-  /** Optional tag identifying the originating source. */
-  source?: string;
+function reducer(state: AppState, action: AppAction): AppState {
+  switch (action.type) {
+    case 'openmat/seeded': {
+      return { ...state, openMats: loadKey<OpenMat[]>('openMats') ?? state.openMats };
+    }
+    case 'rsvp/toggled': {
+      const { rsvp } = action.payload as AppActionMap['rsvp/toggled'];
+      const existing = state.rsvps.findIndex(r => r.openMatId === rsvp.openMatId);
+      let next: Rsvp[];
+      if (existing >= 0) {
+        if (state.rsvps[existing]!.status === rsvp.status) {
+          next = state.rsvps.filter((_, i) => i !== existing);
+        } else {
+          next = state.rsvps.map((r, i) => (i === existing ? rsvp : r));
+        }
+      } else {
+        next = [...state.rsvps, rsvp];
+      }
+      return { ...state, rsvps: next };
+    }
+    case 'rsvp/removed': {
+      const { openMatId } = action.payload as AppActionMap['rsvp/removed'];
+      return { ...state, rsvps: state.rsvps.filter(r => r.openMatId !== openMatId) };
+    }
+    case 'settings/themeChanged': {
+      const { theme } = action.payload as AppActionMap['settings/themeChanged'];
+      return { ...state, settings: { ...state.settings, theme } };
+    }
+    case 'data/reset': {
+      clearAll();
+      const mats = seedOpenMats();
+      return { ...defaultState(), openMats: mats };
+    }
+    default:
+      return state;
+  }
 }
 
-const MAX_LOG = 1000;
-let _seq = 0;
+// ── Store Singleton ──
 
-const [_log, _setLog] = createSignal<readonly LogEntry[]>([]);
+type Subscriber = (state: AppState) => void;
 
-export const appStore = {
-  /**
-   * Dispatch an action: appends a LogEntry and emits on the internal bus.
-   * This is the ONLY way to broadcast app-wide state changes.
-   */
-  dispatch<K extends keyof AppActionMap>(
-    type: K,
-    payload: AppActionMap[K],
-    meta?: { source?: string },
-  ): void {
-    const entry: LogEntry = {
-      seq: ++_seq,
-      ts: new Date().toISOString(),
-      type: type as string,
-      payload,
-      source: meta?.source,
-    };
-    _setLog((prev) => {
-      const next = [...prev, entry];
-      return next.length > MAX_LOG ? next.slice(-MAX_LOG) : next;
+class Store {
+  private state: AppState;
+  private subs = new Set<Subscriber>();
+
+  constructor() {
+    const mats = loadKey<OpenMat[]>('openMats');
+    const rsvps = loadKey<Rsvp[]>('rsvps');
+    const settings = loadKey<AppState['settings']>('settings');
+
+    if (mats) {
+      this.state = {
+        openMats: mats,
+        rsvps: rsvps ?? [],
+        settings: settings ?? defaultState().settings,
+      };
+    } else {
+      // First visit — seed sample data
+      const seeded = seedOpenMats();
+      this.state = { ...defaultState(), openMats: seeded };
+    }
+
+    // Log app boot
+    appendLog({ kind: 'system', type: 'app/boot', preview: `page=${location.pathname}` });
+  }
+
+  getState(): AppState {
+    return this.state;
+  }
+
+  dispatch<T extends AppActionType>(action: AppAction<T>): void {
+    // Log every dispatched action
+    appendLog({
+      kind: 'action',
+      type: action.type,
+      preview: compactPreview(action.payload),
     });
-    eventBus.emit(type, payload);
-  },
 
-  /** Subscribe to a specific action type. */
-  on<K extends keyof AppActionMap>(
-    type: K,
-    handler: (payload: AppActionMap[K]) => void,
-  ): void {
-    eventBus.on(type, handler);
-  },
+    // Reduce
+    this.state = reducer(this.state, action as AppAction);
 
-  /** Unsubscribe from a specific action type. */
-  off<K extends keyof AppActionMap>(
-    type: K,
-    handler: (payload: AppActionMap[K]) => void,
-  ): void {
-    eventBus.off(type, handler);
-  },
+    // Persist
+    saveKey('openMats', this.state.openMats);
+    saveKey('rsvps', this.state.rsvps);
+    saveKey('settings', this.state.settings);
 
-  /**
-   * Reactive signal accessor for the session log.
-   * Call inside a SolidJS reactive root for live updates.
-   */
-  log: _log,
+    // Notify subscribers
+    this.subs.forEach(fn => fn(this.state));
 
-  /** Wipe the in-memory session log (does not affect persisted data). */
-  clearLog(): void {
-    _setLog([]);
-  },
-};
+    // Emit on event bus (also logged there as kind: 'event')
+    eventBus.emit(action.type, action.payload as AppActionMap[typeof action.type]);
+  }
+
+  subscribe(fn: Subscriber): () => void {
+    this.subs.add(fn);
+    return () => this.subs.delete(fn);
+  }
+}
+
+export const store = new Store();

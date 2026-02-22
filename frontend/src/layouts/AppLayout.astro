@@ -1,0 +1,65 @@
+---
+import TopNav from '../ui/components/TopNav.astro';
+
+/* Global CSS — imported in frontmatter so Astro bundles them globally */
+import '../ui/css/tokens.css';
+import '../ui/css/base.css';
+import '../ui/css/components.css';
+import '../ui/css/pages.css';
+
+interface Props {
+  title: string;
+  currentPath: string;
+}
+
+const { title, currentPath } = Astro.props;
+
+// BASE_URL is '/' in dev, '/bjj-open-mats-mn/' on GitHub Pages.
+// Normalize to always have a trailing slash so path concatenation is safe.
+const rawBase = import.meta.env.BASE_URL ?? '/';
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>{title} — BJJ Open Mats</title>
+    <link rel="manifest" href={`${base}manifest.webmanifest`} />
+    <link rel="icon" type="image/svg+xml" href={`${base}icons/icon.svg`} />
+    <link rel="apple-touch-icon" href={`${base}icons/icon-192.png`} />
+  </head>
+  <body>
+    <TopNav currentPath={currentPath} />
+
+    <main class="app-content">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <script>
+      // Mobile nav toggle
+      const toggle = document.getElementById('nav-toggle');
+      const links = document.getElementById('nav-links');
+      toggle?.addEventListener('click', () => {
+        links?.classList.toggle('open');
+      });
+      links?.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => links?.classList.remove('open'));
+      });
+    </script>
+    <script>
+      // Service worker — register at the correct subpath using BASE_URL
+      if ('serviceWorker' in navigator) {
+        const swUrl = import.meta.env.BASE_URL + 'sw.js';
+        navigator.serviceWorker.register(swUrl, {
+          // Scope must match the base path so the SW only controls pages under it
+          scope: import.meta.env.BASE_URL,
+        }).catch(() => {});
+      }
+    </script>
+  </body>
+</html>

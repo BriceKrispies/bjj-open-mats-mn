@@ -1,0 +1,18 @@
+---
+/**
+ * Input component — styled text input.
+ */
+interface Props {
+  type?: string;
+  name?: string;
+  id?: string;
+  placeholder?: string;
+  value?: string;
+  class?: string;
+}
+
+const { type = 'text', name, id, placeholder, value, class: className } = Astro.props;
+const classes = ['input', className].filter(Boolean).join(' ');
+---
+
+<input type={type} name={name} id={id} placeholder={placeholder} value={value} class={classes} />

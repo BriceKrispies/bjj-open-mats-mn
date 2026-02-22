@@ -1,0 +1,52 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Settings" currentPath="/settings">
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title">Settings</h1>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="settings-row">
+      <div class="settings-row__info">
+        <div class="settings-row__label">Reset App Data</div>
+        <div class="settings-row__desc">
+          Clears all RSVPs and reloads sample open mats. This cannot be undone.
+        </div>
+        <div class="settings-row__desc" id="data-stats" style="margin-top:8px;"></div>
+      </div>
+      <div class="settings-row__action">
+        <button class="btn btn--danger btn--sm" id="reset-btn">Reset Data</button>
+      </div>
+    </div>
+  </div>
+</AppLayout>
+
+<script>
+  import { store } from '../core/store';
+  import { bootstrap } from '../registry';
+  import { createAction } from '../core/actions';
+  import { getSettingsView } from '../modules/settings/settingsViewModel';
+
+  bootstrap();
+
+  function render() {
+    const stats = document.getElementById('data-stats');
+    if (!stats) return;
+    const view = getSettingsView(store.getState());
+    stats.textContent = `${view.openMatCount} open mats · ${view.rsvpCount} RSVPs stored`;
+  }
+
+  document.getElementById('reset-btn')?.addEventListener('click', () => {
+    if (confirm('Reset all app data? This clears RSVPs and reloads sample mats.')) {
+      store.dispatch(createAction('data/reset', undefined));
+      render();
+    }
+  });
+
+  render();
+  store.subscribe(() => render());
+</script>

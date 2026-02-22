@@ -20,20 +20,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: frontend
-        run: bun install
+        run: npm ci
+
+      - name: Generate icons
+        working-directory: frontend
+        run: node scripts/gen-icons.mjs
 
       - name: Build
         working-directory: frontend
-        run: bun run build
+        run: npm run build
         # GITHUB_ACTIONS=true is set automatically by the runner.
-        # vite.config.ts reads it to set base: '/bjj-open-mats-mn/'
-
-      - name: Copy index.html to 404.html for SPA deep-link support
-        run: cp frontend/dist/index.html frontend/dist/404.html
+        # astro.config.mjs reads it to set base: '/bjj-open-mats-mn'
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

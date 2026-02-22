@@ -1,0 +1,80 @@
+/* ── Page-specific Composition ── */
+@layer pages {
+
+  /* ─ Calendar page ─ */
+  .cal-page-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+  @media (min-width: 860px) {
+    .cal-page-layout {
+      grid-template-columns: 1fr 360px;
+      align-items: start;
+    }
+  }
+  .cal-detail__header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--c-text-secondary);
+    background: var(--c-bg);
+    border-bottom: var(--border-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─ Settings page ─ */
+  .settings-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--sp-6);
+    padding: var(--sp-5) var(--sp-4);
+    border-bottom: var(--border-light);
+  }
+  .settings-row:last-child {
+    border-bottom: none;
+  }
+  .settings-row__info {
+    flex: 1;
+    min-width: 0;
+  }
+  .settings-row__label {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-medium);
+    color: var(--c-text);
+    margin-bottom: var(--sp-1);
+  }
+  .settings-row__desc {
+    font-size: var(--fs-sm);
+    color: var(--c-text-muted);
+    line-height: var(--lh-normal);
+  }
+  .settings-row__action {
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* ─ Dev page ─ */
+  .dev-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: var(--border-light);
+    background: var(--c-bg);
+    min-height: 40px;
+  }
+  .dev-count {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}

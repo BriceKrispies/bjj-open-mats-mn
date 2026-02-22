@@ -1,0 +1,25 @@
+---
+/**
+ * ListRow component — a horizontal row with primary/secondary text and an action slot.
+ */
+interface Props {
+  primary: string;
+  secondary?: string;
+  meta?: string;
+  class?: string;
+}
+
+const { primary, secondary, meta, class: className } = Astro.props;
+const classes = ['list-row', className].filter(Boolean).join(' ');
+---
+
+<div class={classes}>
+  <div class="list-row__body">
+    <span class="list-row__primary">{primary}</span>
+    {secondary && <span class="list-row__secondary">{secondary}</span>}
+    {meta && <span class="list-row__meta">{meta}</span>}
+  </div>
+  <div class="list-row__action">
+    <slot />
+  </div>
+</div>

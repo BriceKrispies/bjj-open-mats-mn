@@ -1,0 +1,78 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Home" currentPath="/">
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title">This Week</h1>
+      <span class="page-header__subtitle">Open mat schedule</span>
+    </div>
+  </div>
+  <div id="home-content">
+    <div class="section">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+</AppLayout>
+
+<script>
+  import { store } from '../core/store';
+  import { bootstrap } from '../registry';
+  import { getWeekGroups } from '../modules/home/homeViewModel';
+  import { toggleRsvp } from '../core/repositories/rsvps';
+
+  bootstrap();
+
+  function esc(s: string): string {
+    const el = document.createElement('span');
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
+  function render() {
+    const container = document.getElementById('home-content');
+    if (!container) return;
+
+    const groups = getWeekGroups(store.getState());
+
+    container.innerHTML = `<div class="section">${groups
+      .map(group => `
+        <div class="day-group">
+          <div class="day-label${group.isToday ? ' day-label--today' : ''}">
+            <span>${esc(group.label)}</span>
+            ${group.isToday ? '<span class="badge badge--today">Today</span>' : ''}
+          </div>
+          ${group.mats.map(row => `
+            <div class="list-row">
+              <div class="list-row__body">
+                <span class="list-row__primary">${esc(row.mat.gymName)}</span>
+                <span class="list-row__secondary">${esc(row.timeLabel)}</span>
+                ${row.mat.address ? `<span class="list-row__secondary">· ${esc(row.mat.address)}</span>` : ''}
+                ${row.mat.notes ? `<span class="list-row__meta">${esc(row.mat.notes)}</span>` : ''}
+              </div>
+              <div class="list-row__badges">
+                ${row.mat.capacity ? `<span class="badge badge--muted">${row.mat.capacity} cap</span>` : ''}
+              </div>
+              <div class="list-row__action">
+                <button
+                  class="btn btn--sm ${row.rsvp?.status === 'going' ? 'btn--success' : 'btn--primary'}"
+                  data-rsvp="${row.mat.id}"
+                >${row.rsvp?.status === 'going' ? '✓ Going' : 'RSVP'}</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}</div>`;
+
+    container.querySelectorAll<HTMLButtonElement>('[data-rsvp]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const matId = btn.dataset.rsvp;
+        if (matId) toggleRsvp(matId);
+      });
+    });
+  }
+
+  render();
+  store.subscribe(() => render());
+</script>

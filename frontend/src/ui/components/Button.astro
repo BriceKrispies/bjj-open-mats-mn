@@ -1,0 +1,29 @@
+---
+/**
+ * Button component — renders a styled <button> or <a>.
+ * Usage: <Button variant="primary" size="sm">Click</Button>
+ */
+interface Props {
+  variant?: 'default' | 'primary' | 'success' | 'danger' | 'ghost';
+  size?: 'default' | 'sm';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  id?: string;
+  class?: string;
+}
+
+const { variant = 'default', size = 'default', href, type = 'button', id, class: className } = Astro.props;
+
+const classes = [
+  'btn',
+  variant !== 'default' && `btn--${variant}`,
+  size === 'sm' && 'btn--sm',
+  className,
+].filter(Boolean).join(' ');
+---
+
+{href ? (
+  <a href={href} class={classes} id={id}><slot /></a>
+) : (
+  <button type={type} class={classes} id={id}><slot /></button>
+)}

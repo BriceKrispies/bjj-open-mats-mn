@@ -1,0 +1,17 @@
+---
+/**
+ * Select component — styled dropdown.
+ */
+interface Props {
+  name?: string;
+  id?: string;
+  class?: string;
+}
+
+const { name, id, class: className } = Astro.props;
+const classes = ['input', className].filter(Boolean).join(' ');
+---
+
+<select name={name} id={id} class={classes}>
+  <slot />
+</select>

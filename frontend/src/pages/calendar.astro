@@ -1,0 +1,156 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+---
+
+<AppLayout title="Calendar" currentPath="/calendar">
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-header__title" id="cal-month-label">Calendar</h1>
+    </div>
+    <div class="page-header__actions">
+      <button class="btn btn--ghost btn--sm" id="cal-prev">← Prev</button>
+      <button class="btn btn--sm" id="cal-today">Today</button>
+      <button class="btn btn--ghost btn--sm" id="cal-next">Next →</button>
+    </div>
+  </div>
+
+  <div class="cal-page-layout">
+    <div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="section" id="cal-detail">
+      <div class="cal-detail__header" id="cal-detail-header">Select a day</div>
+      <div id="cal-detail-content">
+        <div class="empty-state">Click a day to see open mats.</div>
+      </div>
+    </div>
+  </div>
+</AppLayout>
+
+<script>
+  import { store } from '../core/store';
+  import { bootstrap } from '../registry';
+  import { getCalendarMonth, getDayMats } from '../modules/calendar/calendarViewModel';
+  import { toggleRsvp } from '../core/repositories/rsvps';
+  import { DOW_LABELS, toDateKey, dayLabel, fromDateKey } from '../core/time';
+
+  bootstrap();
+
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth();
+  let selectedDateKey: string | null = toDateKey(new Date());
+
+  function esc(s: string): string {
+    const el = document.createElement('span');
+    el.textContent = s;
+    return el.innerHTML;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('cal-grid');
+    const label = document.getElementById('cal-month-label');
+    if (!grid || !label) return;
+
+    const cal = getCalendarMonth(store.getState(), currentYear, currentMonth);
+    label.textContent = cal.label;
+
+    grid.innerHTML =
+      DOW_LABELS.map(d => `<div class="cal-dow">${d}</div>`).join('') +
+      cal.cells.map(cell => {
+        const classes = ['cal-cell'];
+        if (!cell.isCurrentMonth) classes.push('cal-cell--outside');
+        if (cell.isToday) classes.push('cal-cell--today');
+        if (cell.dateKey === selectedDateKey) classes.push('cal-cell--selected');
+        return `
+          <div class="${classes.join(' ')}" data-date="${cell.dateKey}">
+            <span class="cal-cell__day">${cell.day}</span>
+            ${cell.matCount > 0
+              ? `<div class="cal-indicators"><span class="cal-pip"></span><span class="cal-pip-count">${cell.matCount}</span></div>`
+              : ''}
+          </div>
+        `;
+      }).join('');
+
+    grid.querySelectorAll<HTMLDivElement>('[data-date]').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedDateKey = el.dataset.date ?? null;
+        renderGrid();
+        renderDetail();
+      });
+    });
+  }
+
+  function renderDetail() {
+    const header = document.getElementById('cal-detail-header');
+    const content = document.getElementById('cal-detail-content');
+    if (!header || !content) return;
+
+    if (!selectedDateKey) {
+      header.textContent = 'Select a day';
+      content.innerHTML = '<div class="empty-state">Click a day to see open mats.</div>';
+      return;
+    }
+
+    const d = fromDateKey(selectedDateKey);
+    header.textContent = dayLabel(d);
+
+    const rows = getDayMats(store.getState(), selectedDateKey);
+    if (rows.length === 0) {
+      content.innerHTML = '<div class="empty-state">No open mats this day.</div>';
+      return;
+    }
+
+    content.innerHTML = rows.map(row => `
+      <div class="list-row">
+        <div class="list-row__body">
+          <span class="list-row__primary">${esc(row.mat.gymName)}</span>
+          <span class="list-row__secondary">${esc(row.timeLabel)}</span>
+          ${row.mat.address ? `<span class="list-row__meta">${esc(row.mat.address)}</span>` : ''}
+          ${row.mat.notes ? `<span class="list-row__meta">${esc(row.mat.notes)}</span>` : ''}
+        </div>
+        <div class="list-row__badges">
+          ${row.mat.capacity ? `<span class="badge badge--muted">${row.mat.capacity} cap</span>` : ''}
+        </div>
+        <div class="list-row__action">
+          <button
+            class="btn btn--sm ${row.rsvp?.status === 'going' ? 'btn--success' : 'btn--primary'}"
+            data-rsvp="${row.mat.id}"
+          >${row.rsvp?.status === 'going' ? '✓ Going' : 'RSVP'}</button>
+        </div>
+      </div>
+    `).join('');
+
+    content.querySelectorAll<HTMLButtonElement>('[data-rsvp]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const matId = btn.dataset.rsvp;
+        if (matId) toggleRsvp(matId);
+      });
+    });
+  }
+
+  document.getElementById('cal-prev')?.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderGrid();
+  });
+  document.getElementById('cal-next')?.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    renderGrid();
+  });
+  document.getElementById('cal-today')?.addEventListener('click', () => {
+    const now = new Date();
+    currentYear = now.getFullYear();
+    currentMonth = now.getMonth();
+    selectedDateKey = toDateKey(now);
+    renderGrid();
+    renderDetail();
+  });
+
+  renderGrid();
+  renderDetail();
+  store.subscribe(() => {
+    renderGrid();
+    renderDetail();
+  });
+</script>
