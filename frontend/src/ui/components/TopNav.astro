@@ -5,22 +5,27 @@ interface Props {
 
 const { currentPath } = Astro.props;
 
+// Strip trailing slash from BASE_URL so we can prepend it to paths that start with '/'.
+// Dev:  BASE_URL = '/'        → prefix = ''
+// Prod: BASE_URL = '/bjj-open-mats-mn/' → prefix = '/bjj-open-mats-mn'
+const prefix = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/calendar', label: 'Calendar' },
-  { href: '/settings', label: 'Settings' },
-  { href: '/dev', label: 'Dev' },
+  { path: '/', label: 'Home' },
+  { path: '/calendar', label: 'Calendar' },
+  { path: '/settings', label: 'Settings' },
+  { path: '/dev', label: 'Dev' },
 ];
 ---
 
 <nav class="top-nav">
-  <a href="/" class="top-nav__brand">BJJ Open Mats</a>
+  <a href={prefix + '/'} class="top-nav__brand">BJJ Open Mats</a>
   <div class="top-nav__links" id="nav-links">
     {navLinks.map(link => (
       <a
-        href={link.href}
+        href={prefix + link.path}
         class="top-nav__link"
-        aria-current={currentPath === link.href ? 'page' : undefined}
+        aria-current={currentPath === link.path ? 'page' : undefined}
       >
         {link.label}
       </a>
