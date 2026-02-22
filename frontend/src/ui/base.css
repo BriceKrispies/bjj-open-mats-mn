@@ -1,0 +1,20 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  color: var(--c-text);
+  background: var(--c-bg);
+}
+
+body { min-height: 100dvh; }
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: var(--c-bg);
+}
+
+a { color: var(--c-primary); text-decoration: none; }
