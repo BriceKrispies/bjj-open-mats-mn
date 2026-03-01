@@ -1,0 +1,64 @@
+{
+  "generatedAt": "2026-03-01T07:00:00.000Z",
+  "basePath": "",
+  "modules": [
+    {
+      "id": "calendar",
+      "route": "/calendar",
+      "pageFile": "src/pages/calendar.astro",
+      "rootTestId": "page:calendar:root",
+      "testDir": "tests/pw/modules/calendar",
+      "primaryTestIds": [
+        "page:calendar:root",
+        "page:calendar:prev",
+        "page:calendar:today",
+        "page:calendar:next"
+      ]
+    },
+    {
+      "id": "dev",
+      "route": "/dev",
+      "pageFile": null,
+      "rootTestId": "page:dev:root",
+      "testDir": "tests/pw/modules/dev",
+      "primaryTestIds": [
+        "page:dev:root"
+      ]
+    },
+    {
+      "id": "gyms",
+      "route": "/gyms",
+      "pageFile": "src/pages/gyms.astro",
+      "rootTestId": "page:gyms:root",
+      "testDir": "tests/pw/modules/gyms",
+      "primaryTestIds": [
+        "page:gyms:root",
+        "page:gyms:submit-gym",
+        "page:gyms:search",
+        "page:gyms:status-filter"
+      ]
+    },
+    {
+      "id": "home",
+      "route": "/",
+      "pageFile": "src/pages/index.astro",
+      "rootTestId": "page:home:root",
+      "testDir": "tests/pw/modules/home",
+      "primaryTestIds": [
+        "page:home:root"
+      ]
+    },
+    {
+      "id": "settings",
+      "route": "/settings",
+      "pageFile": "src/pages/settings.astro",
+      "rootTestId": "page:settings:root",
+      "testDir": "tests/pw/modules/settings",
+      "primaryTestIds": [
+        "page:settings:root",
+        "page:settings:reset",
+        "page:settings:clear-log"
+      ]
+    }
+  ]
+}

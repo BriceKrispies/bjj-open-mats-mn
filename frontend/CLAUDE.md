@@ -125,4 +125,41 @@ npm run dev        # dev server on port 3000
 npm run build      # build to dist/
 npm run typecheck  # tsc --noEmit
 npm run lint       # eslint src/
+npm run pw         # run all Playwright tests
+npm run pw:mod -- <module>  # run one module's tests (e.g. npm run pw:mod -- calendar)
+npm run pw:coverage         # warn about modules missing Playwright tests
 ```
+
+## Playwright Test Layout
+
+```
+tests/pw/
+├── modules.manifest.json   # machine-generated module manifest (see below)
+└── modules/
+    ├── calendar/calendar.pw.spec.ts
+    ├── dev/dev.pw.spec.ts
+    ├── gyms/gyms.pw.spec.ts
+    ├── home/home.pw.spec.ts
+    └── settings/settings.pw.spec.ts
+```
+
+### modules.manifest.json
+
+`tests/pw/modules.manifest.json` is a **generated, committed artifact** — do not hand-edit it.
+
+**What it contains:** a structured description of every feature module: its route, corresponding
+page file, canonical root `data-testid` (`page:<moduleId>:root`), and any statically-discoverable
+`data-testid` values already present in the page markup.
+
+**How it was generated:** static analysis of the codebase — no app execution required:
+- Module ids and routes are read from each `src/modules/<name>/index.ts` (`nav.href`).
+- Page files are matched by route (`/` → `index.astro`, `/<name>` → `<name>.astro`).
+- Known `data-testid` values are extracted by inspecting `testId(SCOPE, ...)` spread calls
+  in the Astro template markup. Dynamic testids (containing runtime variables like `row.mat.id`)
+  are excluded. The `dev` module has no dedicated page (its UI lives in `/settings`).
+- `basePath` is `""` because Playwright runs against the local dev server; the production
+  base (`/bjj-open-mats-mn/`) is injected by the GitHub Actions build only.
+
+**To regenerate:** re-run the analysis and overwrite the file. There is no automated script
+for this yet — it was produced by AI-assisted static inspection and should be re-run whenever
+modules are added, removed, or their routes change.
