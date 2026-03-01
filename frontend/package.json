@@ -8,7 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint src/",
-    "typecheck": "astro check && tsc --noEmit"
+    "typecheck": "astro check && tsc --noEmit",
+    "pw": "playwright test",
+    "pw:mod": "playwright test tests/pw/modules",
+    "pw:coverage": "node scripts/pw-coverage.mjs"
   },
   "dependencies": {
     "astro": "^5.5.0"

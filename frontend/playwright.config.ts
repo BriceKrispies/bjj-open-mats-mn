@@ -1,7 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './tests/pw',
+  testMatch: '**/*.pw.spec.ts',
   use: {
     baseURL: 'http://localhost:3000',
     testIdAttribute: 'data-testid',

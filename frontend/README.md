@@ -14,6 +14,38 @@ npm run typecheck    # run Astro check + tsc
 node scripts/gen-icons.mjs  # generate placeholder PNG icons
 ```
 
+## Playwright Tests
+
+Test files live under `tests/pw/`, mirroring the `src/modules/` structure.
+
+### Folder convention
+
+```
+tests/pw/
+  modules/
+    home/        home.pw.spec.ts
+    calendar/    calendar.pw.spec.ts
+    settings/    settings.pw.spec.ts
+    dev/         dev.pw.spec.ts
+    gyms/        gyms.pw.spec.ts
+```
+
+Each module gets one entry spec: `tests/pw/modules/<name>/<name>.pw.spec.ts`.
+
+### Running tests
+
+```bash
+npm run pw                    # run all Playwright tests
+npm run pw:mod -- calendar    # run one module's tests
+npm run pw:coverage           # check which modules have test coverage (warn only)
+```
+
+`npm run pw:mod -- <module>` expands to `playwright test tests/pw/modules <module>`,
+which runs tests under `tests/pw/modules/` whose path contains `<module>`.
+
+Tests start the dev server automatically via `webServer` in `playwright.config.ts`.
+If the dev server is already running, it is reused (`reuseExistingServer: true` locally).
+
 ## Architecture
 
 ```

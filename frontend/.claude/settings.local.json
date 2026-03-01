@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npm info:*)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(node:*)",
+      "Bash(echo:*)"
     ]
   }
 }
