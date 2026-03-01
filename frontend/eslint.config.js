@@ -1,9 +1,11 @@
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import astroParser from 'astro-eslint-parser';
+import localPlugin from './eslint-rules/require-testid.js';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '.astro/**', '**/*.astro'],
+    ignores: ['dist/**', 'node_modules/**', '.astro/**'],
   },
   {
     files: ['src/**/*.ts'],
@@ -69,6 +71,21 @@ export default [
           },
         ],
       }],
+    },
+  },
+  // Astro templates — enforce data-testid on interactive elements
+  {
+    files: ['src/**/*.astro'],
+    languageOptions: {
+      parser: astroParser,
+      parserOptions: {
+        parser: tsParser,
+        extraFileExtensions: ['.astro'],
+      },
+    },
+    plugins: { local: localPlugin },
+    rules: {
+      'local/require-testid': 'error',
     },
   },
 ];

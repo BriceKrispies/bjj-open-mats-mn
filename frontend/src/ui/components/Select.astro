@@ -6,12 +6,13 @@ interface Props {
   name?: string;
   id?: string;
   class?: string;
+  testid?: string;
 }
 
-const { name, id, class: className } = Astro.props;
+const { name, id, class: className, testid } = Astro.props;
 const classes = ['input', className].filter(Boolean).join(' ');
 ---
 
-<select name={name} id={id} class={classes}>
+<select name={name} id={id} class={classes} data-testid={testid ?? undefined}>
   <slot />
 </select>

@@ -1,5 +1,7 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
+import { testScope, testId } from '../lib/testid';
+const SCOPE = testScope(import.meta);  // → "page:settings"
 ---
 
 <AppLayout title="Settings" currentPath="/settings">
@@ -19,7 +21,7 @@ import AppLayout from '../layouts/AppLayout.astro';
         <div class="settings-row__desc" id="data-stats" style="margin-top:8px;"></div>
       </div>
       <div class="settings-row__action">
-        <button class="btn btn--danger btn--sm" id="reset-btn">Reset Data</button>
+        <button class="btn btn--danger btn--sm" id="reset-btn" {...testId(SCOPE, 'reset')}>Reset Data</button>
       </div>
     </div>
   </div>
@@ -27,7 +29,7 @@ import AppLayout from '../layouts/AppLayout.astro';
   <div class="section">
     <div class="dev-toolbar">
       <span class="dev-count" style="font-family:var(--font-mono);">Time · Kind · Type · Payload</span>
-      <button class="btn btn--sm" id="clear-log-btn">Clear Log</button>
+      <button class="btn btn--sm" id="clear-log-btn" {...testId(SCOPE, 'clear-log')}>Clear Log</button>
     </div>
     <div id="log-content">
       <div class="empty-state">No events yet — navigate or interact with the app.</div>

@@ -21,6 +21,9 @@ import AppLayout from '../layouts/AppLayout.astro';
   import { bootstrap } from '../registry';
   import { getWeekGroups } from '../modules/home/homeViewModel';
   import { toggleRsvp } from '../core/repositories/rsvps';
+  import { tid } from '../lib/testid';
+
+  const SCOPE = 'page:index';
 
   bootstrap();
 
@@ -58,6 +61,7 @@ import AppLayout from '../layouts/AppLayout.astro';
                 <button
                   class="btn btn--sm ${row.rsvp?.status === 'going' ? 'btn--success' : 'btn--primary'}"
                   data-rsvp="${row.mat.id}"
+                  data-testid="${tid(SCOPE, 'openmat', row.mat.id, 'rsvp-toggle')}"
                 >${row.rsvp?.status === 'going' ? '✓ Going' : 'RSVP'}</button>
               </div>
             </div>

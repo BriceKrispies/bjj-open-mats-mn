@@ -10,9 +10,10 @@ interface Props {
   type?: 'button' | 'submit' | 'reset';
   id?: string;
   class?: string;
+  testid?: string;
 }
 
-const { variant = 'default', size = 'default', href, type = 'button', id, class: className } = Astro.props;
+const { variant = 'default', size = 'default', href, type = 'button', id, class: className, testid } = Astro.props;
 
 const classes = [
   'btn',
@@ -23,7 +24,7 @@ const classes = [
 ---
 
 {href ? (
-  <a href={href} class={classes} id={id}><slot /></a>
+  <a href={href} class={classes} id={id} data-testid={testid ?? undefined}><slot /></a>
 ) : (
-  <button type={type} class={classes} id={id}><slot /></button>
+  <button type={type} class={classes} id={id} data-testid={testid ?? undefined}><slot /></button>
 )}

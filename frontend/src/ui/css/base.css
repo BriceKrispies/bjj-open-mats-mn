@@ -23,6 +23,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
+    background: var(--c-bg);
   }
 
   /* Kill default list styles everywhere */
@@ -91,6 +92,7 @@
     overflow-y: auto;
     padding-bottom: var(--sp-12);
     scrollbar-width: none;
+    background: var(--c-bg);
   }
   .app-content::-webkit-scrollbar {
     display: none;

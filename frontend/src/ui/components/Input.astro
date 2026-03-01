@@ -9,10 +9,11 @@ interface Props {
   placeholder?: string;
   value?: string;
   class?: string;
+  testid?: string;
 }
 
-const { type = 'text', name, id, placeholder, value, class: className } = Astro.props;
+const { type = 'text', name, id, placeholder, value, class: className, testid } = Astro.props;
 const classes = ['input', className].filter(Boolean).join(' ');
 ---
 
-<input type={type} name={name} id={id} placeholder={placeholder} value={value} class={classes} />
+<input type={type} name={name} id={id} placeholder={placeholder} value={value} class={classes} data-testid={testid ?? undefined} />

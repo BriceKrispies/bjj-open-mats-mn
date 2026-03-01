@@ -1,5 +1,7 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
+import { testScope, testId } from '../lib/testid';
+const SCOPE = testScope(import.meta);  // → "page:gyms"
 ---
 
 <AppLayout title="Gyms" currentPath="/gyms">
@@ -9,7 +11,7 @@ import AppLayout from '../layouts/AppLayout.astro';
       <span class="page-header__subtitle">Community-maintained registry</span>
     </div>
     <div class="page-header__actions">
-      <button class="btn btn--primary btn--sm" id="submit-gym-btn">+ Submit Gym</button>
+      <button class="btn btn--primary btn--sm" id="submit-gym-btn" {...testId(SCOPE, 'submit-gym')}>+ Submit Gym</button>
     </div>
   </div>
 
@@ -22,10 +24,11 @@ import AppLayout from '../layouts/AppLayout.astro';
           id="gyms-search"
           placeholder="Search gyms…"
           aria-label="Search gyms"
+          {...testId(SCOPE, 'search')}
         />
       </div>
       <div class="gyms-toolbar__right">
-        <select class="gyms-status-filter" id="gyms-status-filter" aria-label="Filter by status">
+        <select class="gyms-status-filter" id="gyms-status-filter" aria-label="Filter by status" {...testId(SCOPE, 'status-filter')}>
           <option value="">All Statuses</option>
           <option value="verified">Verified</option>
           <option value="needs-review">Needs Review</option>
@@ -44,6 +47,9 @@ import AppLayout from '../layouts/AppLayout.astro';
   import { store } from '../core/store';
   import { bootstrap } from '../registry';
   import { getGymList, filterGyms } from '../modules/gyms/gymsViewModel';
+  import { tid } from '../lib/testid';
+
+  const SCOPE = 'page:gyms';
 
   bootstrap();
 
@@ -105,7 +111,7 @@ import AppLayout from '../layouts/AppLayout.astro';
               <td>${statusBadge(gym.status)}</td>
               <td class="gyms-col-verified gyms-col-muted">${esc(gym.lastSeenLabel)}</td>
               <td class="gyms-col-action">
-                <button class="btn btn--sm btn--ghost">Suggest Edit</button>
+                <button class="btn btn--sm btn--ghost" data-testid="${tid(SCOPE, 'suggest-edit', gym.gymName)}">Suggest Edit</button>
               </td>
             </tr>
           `).join('')}

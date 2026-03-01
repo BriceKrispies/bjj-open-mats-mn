@@ -1,0 +1,8 @@
+# Secrets — never commit the real .env
+.env
+
+# Postgres data
+volumes/db/data/
+
+# Uploaded files
+volumes/storage/
