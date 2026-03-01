@@ -22,14 +22,17 @@ export function testScope(meta: ImportMeta): string {
   try { path = new URL(meta.url).pathname; } catch { /* use raw */ }
   path = path.replace(/\\/g, '/');
 
+  // Strip .astro suffix that appears when Vite compiles .astro → .astro.mjs
+  const stripAstro = (s: string) => s.replace(/\.astro$/, '');
+
   const pagesMatch = path.match(/\/pages\/([^/]+)\.[^/.]+$/);
-  if (pagesMatch) return `page:${normalizePart(pagesMatch[1] ?? '')}`;
+  if (pagesMatch) return `page:${normalizePart(stripAstro(pagesMatch[1] ?? ''))}`;
 
   const modulesMatch = path.match(/\/modules\/([^/]+)\//);
   if (modulesMatch) return `mod:${normalizePart(modulesMatch[1] ?? '')}`;
 
   const uiMatch = path.match(/\/ui\/components\/([^/]+)\.[^/.]+$/);
-  if (uiMatch) return `ui:${normalizePart(uiMatch[1] ?? '')}`;
+  if (uiMatch) return `ui:${normalizePart(stripAstro(uiMatch[1] ?? ''))}`;
 
   const filename = (path.split('/').pop() ?? path).replace(/\.[^/.]+$/, '');
   return `src:${normalizePart(filename)}`;
